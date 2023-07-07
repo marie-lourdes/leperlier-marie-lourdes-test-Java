@@ -11,14 +11,13 @@ public class FareCalculatorService {
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
 
-        // get milliseconds for vehicle entrance and 
+        // get time in milliseconds for vehicle entrance and vehicle exit 
         long inHour = ticket.getInTime().getTime(); 
         long outHour = ticket.getOutTime().getTime();
      
-
         //TODO: Some tests are failing here. Need to check if this logic is correct
         float duration = outHour - inHour;
-        //convert duration in rate hour
+        //convert duration milliseconds in rate hour
         duration = duration / 1000 / 60 /60;
         System.out.println("duration"+ duration);
 
