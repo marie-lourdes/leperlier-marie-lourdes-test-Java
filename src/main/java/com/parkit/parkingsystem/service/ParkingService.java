@@ -20,6 +20,7 @@ public class ParkingService {
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
     private  TicketDAO ticketDAO;
+    private double shortDoubleTicketPrice;
 
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
         this.inputReaderUtil = inputReaderUtil;
@@ -108,7 +109,13 @@ public class ParkingService {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
-                System.out.println("Please pay the parking fare:" + ticket.getPrice());
+                
+                //round the decimal number of ticketPrice with a maximum of two digits after the decimal point
+                // Math.round to round and display in interactive shell the  ticket price type Double with 2 number after coma 
+                double ticketPrice = ticket.getPrice();
+                shortDoubleTicketPrice = Math.round(ticketPrice *100.0)/100.0; 
+                System.out.println("Please pay the parking fare:" + shortDoubleTicketPrice);
+                
                 System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
             }else{
                 System.out.println("Unable to update ticket information. Error occurred");
