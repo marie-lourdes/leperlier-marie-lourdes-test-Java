@@ -5,21 +5,23 @@ import com.parkit.parkingsystem.model.Ticket;
 import java.util.Calendar;
 
 public class FareCalculatorService {
-
+	private long inHour;
+	private long outHour;
+	private float duration;
+	
     public void calculateFare(Ticket ticket){
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
 
         // get time in milliseconds for vehicle entrance and vehicle exit 
-        long inHour = ticket.getInTime().getTime(); 
-        long outHour = ticket.getOutTime().getTime();
-     
-        //TODO: Some tests are failing here. Need to check if this logic is correct
-        float duration = outHour - inHour;
-        //convert duration milliseconds in rate hour
-        duration = duration / 1000 / 60 /60;
-        System.out.println("duration"+ duration);
+        inHour = ticket.getInTime().getTime(); 
+        outHour = ticket.getOutTime().getTime();
+        
+        //calculate duration of parking in rate hour
+        duration = calculateDurationOfParking(inHour, outHour, duration);
+       
+       // System.out.println("duration " + duration);
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
@@ -32,5 +34,13 @@ public class FareCalculatorService {
             }
             default: throw new IllegalArgumentException("Unkown Parking Type");
         }
+    }
+    
+    public float calculateDurationOfParking (long inHour, long outHour,float duration) {
+    	 //TODO: Some tests are failing here. Need to check if this logic is correct
+        duration = outHour - inHour;
+        //convert duration milliseconds in rate hour
+        duration = duration / 1000 / 60 / 60;
+        return duration;
     }
 }
