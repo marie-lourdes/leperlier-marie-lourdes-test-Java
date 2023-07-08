@@ -7,7 +7,9 @@ import java.util.Calendar;
 public class FareCalculatorService {
 	private long inHour;
 	private long outHour;
-	private float duration;
+	private double duration;
+	private double rateHourOf30minutes;
+	private boolean isDurationLessThan30minutes;
 	
     public void calculateFare(Ticket ticket){
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
@@ -21,7 +23,7 @@ public class FareCalculatorService {
         //calculate duration of parking in rate hour
         duration = calculateDurationOfParking(inHour, outHour, duration);
        
-       // System.out.println("duration " + duration);
+        System.out.println("duration " + duration);
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
@@ -36,11 +38,18 @@ public class FareCalculatorService {
         }
     }
     
-    public float calculateDurationOfParking (long inHour, long outHour,float duration) {
+    public double calculateDurationOfParking (long inHour, long outHour, double duration) {
     	 //TODO: Some tests are failing here. Need to check if this logic is correct
         duration = outHour - inHour;
         //convert duration milliseconds in rate hour
         duration = duration / 1000 / 60 / 60;
+        rateHourOf30minutes = 30 / 60;
+        isDurationLessThan30minutes = duration <= rateHourOf30minutes; 
+        if(isDurationLessThan30minutes ) {
+     	   duration = 0.0;
+     	   return duration;
+        }
         return duration;
+       
     }
 }
