@@ -7,41 +7,53 @@ import java.util.Calendar;
 <span class="fc" id="L7">public class FareCalculatorService {</span>
 	private long inHour;
 	private long outHour;
-	private float duration;
-	
+	private double duration;
+	private double rateHourOf30minutes;
+	private boolean isDurationLessThan30minutes;
+
     public void calculateFare(Ticket ticket){
-<span class="pc bpc" id="L13" title="1 of 4 branches missed.">        if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){</span>
-<span class="fc" id="L14">            throw new IllegalArgumentException(&quot;Out time provided is incorrect:&quot;+ticket.getOutTime().toString());</span>
+<span class="pc bpc" id="L15" title="1 of 4 branches missed.">        if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){</span>
+<span class="fc" id="L16">            throw new IllegalArgumentException(&quot;Out time provided is incorrect:&quot;+ticket.getOutTime().toString());</span>
         }
 
         // get time in milliseconds for vehicle entrance and vehicle exit 
-<span class="fc" id="L18">        inHour = ticket.getInTime().getTime(); </span>
-<span class="fc" id="L19">        outHour = ticket.getOutTime().getTime();</span>
-        
-        //calculate duration of parking in rate hour
-<span class="fc" id="L22">        duration = calculateDurationOfParking(inHour, outHour, duration);</span>
-       
-       // System.out.println(&quot;duration &quot; + duration);
-
-<span class="pc bpc" id="L26" title="1 of 3 branches missed.">        switch (ticket.getParkingSpot().getParkingType()){</span>
+<span class="fc" id="L20">        inHour = ticket.getInTime().getTime(); </span>
+<span class="fc" id="L21">        outHour = ticket.getOutTime().getTime();</span>
+<span class="fc" id="L22">        duration = calculateDurationOfParking(inHour, outHour, duration);    </span>
+         
+        // define rate of hour for 30 minutes
+<span class="fc" id="L25">        rateHourOf30minutes = 0.5;</span>
+        // check if the duration is less or equal to 30 minutes and return boolean type true or false
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        isDurationLessThan30minutes = duration &lt;= rateHourOf30minutes; </span>
+<span class="fc" id="L28">        System.out.println(&quot;duration------------ &quot; + duration);</span>
+        /* if the duration is less or equal to 30 minutes: 
+        rounds down the duration the rate of hour of the duration , so 0.0 */
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (isDurationLessThan30minutes) {</span>
+<span class="fc" id="L32">        	 duration = Math.floor(duration);  </span>
+<span class="fc" id="L33">             System.out.println(&quot;duration less than 30 min bike and car reduced to &quot; + duration);     </span>
+        }
+     
+<span class="pc bpc" id="L36" title="1 of 3 branches missed.">        switch (ticket.getParkingSpot().getParkingType()){</span>
             case CAR: {
-<span class="fc" id="L28">                ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);</span>
-<span class="fc" id="L29">                break;</span>
+<span class="fc" id="L38">                ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);</span>
+<span class="fc" id="L39">                System.out.println(&quot;ticket price car &quot; + ticket.getPrice());</span>
+<span class="fc" id="L40">                break;</span>
             }
             case BIKE: {
-<span class="fc" id="L32">                ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);</span>
-<span class="fc" id="L33">                break;</span>
+<span class="fc" id="L43">                ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);</span>
+<span class="fc" id="L44">                System.out.println(&quot;ticket price bike &quot; + ticket.getPrice());</span>
+<span class="fc" id="L45">                break;</span>
             }
-<span class="nc" id="L35">            default: throw new IllegalArgumentException(&quot;Unkown Parking Type&quot;);</span>
+<span class="nc" id="L47">            default: throw new IllegalArgumentException(&quot;Unkown Parking Type&quot;);</span>
         }
-<span class="fc" id="L37">    }</span>
+<span class="fc" id="L49">    }</span>
     
-    public float calculateDurationOfParking (long inHour, long outHour,float duration) {
-    	 //TODO: Some tests are failing here. Need to check if this logic is correct
-<span class="fc" id="L41">        duration = outHour - inHour;</span>
-        //convert duration milliseconds in rate hour
-<span class="fc" id="L43">        duration = duration / 1000 / 60 / 60;</span>
-<span class="fc" id="L44">        return duration;</span>
-    }
+    public double calculateDurationOfParking(long inHour, long outHour, double duration) {
+    	// TODO: Some tests are failing here. Need to check if this logic is correct
+<span class="fc" id="L53">        duration = outHour - inHour;</span>
+        // convert duration milliseconds in rate hour
+<span class="fc" id="L55">        duration = duration / 1000 / 60 / 60;      </span>
+<span class="fc" id="L56">        return duration;    </span>
+    }  
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -110,18 +110,19 @@ public class ParkingService {
 <span class="fc" id="L110">                parkingSpot.setAvailable(true);</span>
 <span class="fc" id="L111">                parkingSpotDAO.updateParking(parkingSpot);</span>
                 
-                //round the decimal number of ticketPrice with a maximum of two digits after the decimal poi
-<span class="fc" id="L114">                double ticketPrice = ticket.getPrice();</span>
-<span class="fc" id="L115">                shortDoubleTicketPrice = Math.round(ticketPrice *100.0)/100.0; </span>
-<span class="fc" id="L116">                System.out.println(&quot;Please pay the parking fare:&quot; + shortDoubleTicketPrice);</span>
+                //round the decimal number of ticketPrice with a maximum of two digits after the decimal point
+                // Math.round to round and display in interactive shell the  ticket price type Double with 2 number after coma 
+<span class="fc" id="L115">                double ticketPrice = ticket.getPrice();</span>
+<span class="fc" id="L116">                shortDoubleTicketPrice = Math.round(ticketPrice *100.0)/100.0; </span>
+<span class="fc" id="L117">                System.out.println(&quot;Please pay the parking fare:&quot; + shortDoubleTicketPrice);</span>
                 
-<span class="fc" id="L118">                System.out.println(&quot;Recorded out-time for vehicle number:&quot; + ticket.getVehicleRegNumber() + &quot; is:&quot; + outTime);</span>
-<span class="fc" id="L119">            }else{</span>
-<span class="nc" id="L120">                System.out.println(&quot;Unable to update ticket information. Error occurred&quot;);</span>
+<span class="fc" id="L119">                System.out.println(&quot;Recorded out-time for vehicle number:&quot; + ticket.getVehicleRegNumber() + &quot; is:&quot; + outTime);</span>
+<span class="fc" id="L120">            }else{</span>
+<span class="nc" id="L121">                System.out.println(&quot;Unable to update ticket information. Error occurred&quot;);</span>
             }
-<span class="nc" id="L122">        }catch(Exception e){</span>
-<span class="nc" id="L123">            logger.error(&quot;Unable to process exiting vehicle&quot;,e);</span>
+<span class="nc" id="L123">        }catch(Exception e){</span>
+<span class="nc" id="L124">            logger.error(&quot;Unable to process exiting vehicle&quot;,e);</span>
         }
-<span class="fc" id="L125">    }</span>
+<span class="fc" id="L126">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
