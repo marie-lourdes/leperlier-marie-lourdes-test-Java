@@ -33,6 +33,7 @@ public class FareCalculatorService {
         	 duration = Math.floor(duration);  
              System.out.println("duration less than 30 min bike and car reduced to " + duration);     
         }
+       
      
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
@@ -47,6 +48,11 @@ public class FareCalculatorService {
             }
             default: throw new IllegalArgumentException("Unkown Parking Type");
         }
+        
+        if (!isDurationLessThan30minutes) {
+        	calculateFare(ticket, false);   	
+        }
+       
     }
     
     public double calculateDurationOfParking(long inHour, long outHour, double duration) {
@@ -57,9 +63,16 @@ public class FareCalculatorService {
         return duration;    
     }
 
-	public void calculateFare(Ticket ticket, boolean b) {
+	public void calculateFare(Ticket ticket, boolean discount) {
 		// TODO Auto-generated method stub
-		calculateFare(ticket);
+		boolean hasTicketDiscount = discount;
+		double ticketDiscountPrice = hasTicketDiscount ? 0.95 * ticket.getPrice() : null;
+		ticket.setPrice(ticketDiscountPrice);
+		System.out.println("ticket price discount" + ticketDiscountPrice);
+		/*if (hasTicketDiscount) {
+			0.95 * ticket.getPrice();
+		}*/
+		
 		
 	}  
 }
