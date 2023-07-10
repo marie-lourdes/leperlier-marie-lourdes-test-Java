@@ -5,6 +5,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import java.util.Calendar;
 
 public class FareCalculatorService {
+	private Ticket ticket;
 	private long inHour;
 	private long outHour;
 	private double duration;
@@ -54,5 +55,11 @@ public class FareCalculatorService {
         // convert duration milliseconds in rate hour
         duration = duration / 1000 / 60 / 60;      
         return duration;    
-    }  
+    }
+
+	public void calculateFare(Ticket ticket, boolean b) {
+		// TODO Auto-generated method stub
+		calculateFare(ticket);
+		
+	}  
 }

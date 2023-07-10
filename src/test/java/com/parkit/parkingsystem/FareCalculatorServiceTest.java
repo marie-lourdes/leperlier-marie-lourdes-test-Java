@@ -151,5 +151,23 @@ public class FareCalculatorServiceTest {
         fareCalculatorService.calculateFare(ticket);
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR), ticket.getPrice() );
     }
+    
+
+    @Test
+    public void  calculateFareCarWithDiscount(){
+    	Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  45 * 60 * 1000) );//45 minutes parking time should give 3/4th parking fare
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+        double ticketCarDiscount;
+        		
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket, true);
+        ticketCarDiscount = 0.95 * (fareCalculatorService.calculateFare(ticket));
+        
+    	
+    }
 
 }
