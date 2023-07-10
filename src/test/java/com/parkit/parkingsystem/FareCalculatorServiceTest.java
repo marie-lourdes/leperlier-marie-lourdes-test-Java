@@ -167,8 +167,24 @@ public class FareCalculatorServiceTest {
         fareCalculatorService.calculateFare(ticket, true);
         ticketCarDiscount = 0.95 * (ticket.getPrice());
         assertEquals(ticketCarDiscount, ticket.getPrice());
-        
-    	
+         	
+    }
+    
+    @Test
+    public void  calculateFareBikeWithDiscount(){
+    	Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  45 * 60 * 1000) );//45 minutes parking time should give 3/4th parking fare
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+        double ticketBikeDiscount;
+        		
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket, true);
+        ticketBikeDiscount = 0.95 * (ticket.getPrice());
+        assertEquals(ticketBikeDiscount, ticket.getPrice());
+         	
     }
 
 }
