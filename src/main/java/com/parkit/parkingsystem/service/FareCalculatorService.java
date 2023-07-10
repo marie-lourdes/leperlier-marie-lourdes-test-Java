@@ -50,8 +50,10 @@ public class FareCalculatorService {
         }
         
         if (!isDurationLessThan30minutes) {
-        	calculateFare(ticket, false);   	
+        	calculateFare(ticket, false);
         }
+        	   	
+        
        
     }
     
@@ -66,9 +68,9 @@ public class FareCalculatorService {
 	public void calculateFare(Ticket ticket, boolean discount) {
 		// TODO Auto-generated method stub
 		boolean hasTicketDiscount = discount;
-		double ticketDiscountPrice = hasTicketDiscount ? 0.95 * ticket.getPrice() : null;
+		double ticketDiscountPrice = hasTicketDiscount ? 0.95 * ticket.getPrice() : ticket.getPrice();
 		ticket.setPrice(ticketDiscountPrice);
-		System.out.println("ticket price discount" + ticketDiscountPrice);
+		System.out.println("ticket price discount" + ticket.getPrice());
 		/*if (hasTicketDiscount) {
 			0.95 * ticket.getPrice();
 		}*/
