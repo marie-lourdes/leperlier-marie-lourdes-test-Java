@@ -68,11 +68,6 @@ public class FareCalculatorService {
 			ticket.setPrice(ticketDiscountPrice);
 			System.out.println("ticket price discount" + ticket.getPrice());
         }
-		
-		/*if (hasTicketDiscount) {
-			0.95 * ticket.getPrice();
-		}*/
-		
-		
-	}  
+	
+	} 
 }
