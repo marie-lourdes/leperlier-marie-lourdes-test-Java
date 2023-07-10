@@ -23,7 +23,7 @@ public class FareCalculatorService {
         duration = calculateDurationOfParking(inHour, outHour, duration);    
          
         // define rate of hour for 30 minutes
-        rateHourOf30minutes = 0.5;
+        rateHourOf30minutes = 0.50;
         // check if the duration is less or equal to 30 minutes and return boolean type true or false
         isDurationLessThan30minutes = duration <= rateHourOf30minutes; 
         System.out.println("duration------------ " + duration);
@@ -38,7 +38,7 @@ public class FareCalculatorService {
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
                 ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
-                System.out.println("ticket price car " + ticket.getPrice());
+                System.out.println("ticket price car " + ticket.getPrice());   
                 break;
             }
             case BIKE: {
@@ -48,13 +48,8 @@ public class FareCalculatorService {
             }
             default: throw new IllegalArgumentException("Unkown Parking Type");
         }
-        
-        if (!isDurationLessThan30minutes) {
-        	calculateFare(ticket, false);
-        }
-        	   	
-        
-       
+           
+        calculateFare(ticket, false);
     }
     
     public double calculateDurationOfParking(long inHour, long outHour, double duration) {
@@ -66,11 +61,14 @@ public class FareCalculatorService {
     }
 
 	public void calculateFare(Ticket ticket, boolean discount) {
-		// TODO Auto-generated method stub
-		boolean hasTicketDiscount = discount;
-		double ticketDiscountPrice = hasTicketDiscount ? 0.95 * ticket.getPrice() : ticket.getPrice();
-		ticket.setPrice(ticketDiscountPrice);
-		System.out.println("ticket price discount" + ticket.getPrice());
+		if (duration > rateHourOf30minutes) {
+			// TODO Auto-generated method stub
+			boolean hasTicketDiscount = discount;
+			double ticketDiscountPrice = hasTicketDiscount ? 0.95 * ticket.getPrice() : ticket.getPrice();
+			ticket.setPrice(ticketDiscountPrice);
+			System.out.println("ticket price discount" + ticket.getPrice());
+        }
+		
 		/*if (hasTicketDiscount) {
 			0.95 * ticket.getPrice();
 		}*/
