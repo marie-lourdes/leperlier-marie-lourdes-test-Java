@@ -23,6 +23,7 @@ public class ParkingService {
     private ParkingSpotDAO parkingSpotDAO;
     private  TicketDAO ticketDAO;
     private double shortDoubleTicketPrice;
+    private Map<String, Integer> MapOfNumberOfTicketPerVehicle;
 
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
         this.inputReaderUtil = inputReaderUtil;
@@ -53,12 +54,12 @@ public class ParkingService {
                 System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
                 
                 // Get number of ticket and display message if the vehicle is already registered
-                Map<String, Integer> MapOfNumberOfTicketPerVehicle = ticketDAO.getNbTicket(ticket,vehicleRegNumber);
+                MapOfNumberOfTicketPerVehicle = ticketDAO.getNbTicket(ticket,vehicleRegNumber);
+                System.out.println("MapOfNumberOfTicketPerVehicle" + MapOfNumberOfTicketPerVehicle);
                 if (MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber) && MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber)> 1 ) {
                 	System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de\r\n"
                 			+ "notre parking, vous allez obtenir une remise de 5%");
                 }
-                System.out.println("mapTicket" + MapOfNumberOfTicketPerVehicle);
             }
            
         }catch(Exception e){
@@ -115,7 +116,14 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket);
+            
+            // Apply price discount -5% if the vehicleregNumber is already registered with method calculateFare( ticket, true)
+            if (MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber) && MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber) > 1 ) {
+            	fareCalculatorService.calculateFare(ticket, true);
+            } else {
+            	 fareCalculatorService.calculateFare(ticket);
+            }
+           
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);

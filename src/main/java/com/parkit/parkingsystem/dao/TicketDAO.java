@@ -95,14 +95,14 @@ public class TicketDAO {
     // Count number of ticket per vehicle registered by its numberplate registered
     public Map<String, Integer> getNbTicket(Ticket ticket,String vehicleRegNumber) {
         ticket = new Ticket();
-    	Ticket vehicleNumber= getTicket(vehicleRegNumber);
+    	Ticket vehicleNumber = getTicket(vehicleRegNumber);
     	vehicleNumber.getVehicleRegNumber();
     
-    	for(Map.Entry<String, Integer> vehicleNb : MapOfNumberOfTicketPerVehicle.entrySet() ) {
+    	for (Map.Entry<String, Integer> vehicleNb : MapOfNumberOfTicketPerVehicle.entrySet()) {
     		if (!MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber)) {
-    			MapOfNumberOfTicketPerVehicle.put(vehicleRegNumber,1);
+    			MapOfNumberOfTicketPerVehicle.put(vehicleRegNumber, 1);
     		} else {
-    			Integer val = 	MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber);
+    			Integer val = MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber);
     			MapOfNumberOfTicketPerVehicle.put(vehicleRegNumber, val + 1);
     		}
     			
@@ -113,11 +113,7 @@ public class TicketDAO {
     	/*List<Ticket> listOfNumberOfTicketPerVehicle = new ArrayList<Ticket>();
     	for(Ticket vehicleNb : listOfNumberOfTicketPerVehicle ) {
     		
-    			listOfNumberOfTicketPerVehicle.add(vehicleNb);
-    		
-    		
-     
-    			  
+    			listOfNumberOfTicketPerVehicle.add(vehicleNb);		  
     			
     	}
     	return 	listOfNumberOfTicketPerVehicle;*/
