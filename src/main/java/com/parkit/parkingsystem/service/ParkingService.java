@@ -1,15 +1,17 @@
 package com.parkit.parkingsystem.service;
 
+import java.util.Date;
+import java.util.Map;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.util.InputReaderUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.util.Date;
 
 public class ParkingService {
 
@@ -49,7 +51,14 @@ public class ParkingService {
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
                 System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
-                ticketDAO.getNbTicket(ticket,vehicleRegNumber);
+                
+                // Get number of ticket and display message if the vehicle is already registered
+                Map<String, Integer> MapOfNumberOfTicketPerVehicle = ticketDAO.getNbTicket(ticket,vehicleRegNumber);
+                if (MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber) && MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber)> 1 ) {
+                	System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de\r\n"
+                			+ "notre parking, vous allez obtenir une remise de 5%");
+                }
+                System.out.println("mapTicket" + MapOfNumberOfTicketPerVehicle);
             }
            
         }catch(Exception e){

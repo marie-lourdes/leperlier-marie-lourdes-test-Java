@@ -92,6 +92,7 @@ public class TicketDAO {
         return false;
     }
     
+    // Count number of ticket per vehicle registered by its numberplate registered
     public Map<String, Integer> getNbTicket(Ticket ticket,String vehicleRegNumber) {
         ticket = new Ticket();
     	Ticket vehicleNumber= getTicket(vehicleRegNumber);
@@ -105,7 +106,8 @@ public class TicketDAO {
     			MapOfNumberOfTicketPerVehicle.put(vehicleRegNumber, val + 1);
     		}
     			
-    	}
+    	} 
+        System.out.println("MapOfNumberOfTicketPerVehicle" + MapOfNumberOfTicketPerVehicle);
     	return 	MapOfNumberOfTicketPerVehicle;
     	
     	/*List<Ticket> listOfNumberOfTicketPerVehicle = new ArrayList<Ticket>();
