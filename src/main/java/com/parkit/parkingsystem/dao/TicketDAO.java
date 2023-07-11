@@ -106,23 +106,10 @@ public class TicketDAO {
 						Integer val = MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber);
 						MapOfNumberOfTicketPerVehicle.put(vehicleRegNumber, val + 1);
 					}
-
 				}
-
-				/*
-				 * List<Ticket> listOfNumberOfTicketPerVehicle = new ArrayList<Ticket>();
-				 * for(Ticket vehicleNb : listOfNumberOfTicketPerVehicle ) {
-				 * 
-				 * listOfNumberOfTicketPerVehicle.add(vehicleNb);
-				 * 
-				 * } return listOfNumberOfTicketPerVehicle;
-				 */
-
-				
 
 			} catch (NullPointerException e) {
 				logger.error(" no ticket registered", e);
-
 			}	
 		}
 		System.out.println("MapOfNumberOfTicketPerVehicle" + MapOfNumberOfTicketPerVehicle);
