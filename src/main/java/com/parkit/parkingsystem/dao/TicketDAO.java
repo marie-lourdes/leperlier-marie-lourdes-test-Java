@@ -1,23 +1,28 @@
 package com.parkit.parkingsystem.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
 
 public class TicketDAO {
 
     private static final Logger logger = LogManager.getLogger("TicketDAO");
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
+    
+	Map<String, Integer> MapOfNumberOfTicketPerVehicle = new HashMap<String,Integer>();
 
     public boolean saveTicket(Ticket ticket){
         Connection con = null;
@@ -85,5 +90,34 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return false;
+    }
+    
+    public Map<String, Integer> getNbTicket(Ticket ticket,String vehicleRegNumber) {
+        ticket = new Ticket();
+    	Ticket vehicleNumber= getTicket(vehicleRegNumber);
+    	vehicleNumber.getVehicleRegNumber();
+    
+    	for(Map.Entry<String, Integer> vehicleNb : MapOfNumberOfTicketPerVehicle.entrySet() ) {
+    		if (!MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber)) {
+    			MapOfNumberOfTicketPerVehicle.put(vehicleRegNumber,1);
+    		} else {
+    			Integer val = 	MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber);
+    			MapOfNumberOfTicketPerVehicle.put(vehicleRegNumber, val + 1);
+    		}
+    			
+    	}
+    	return 	MapOfNumberOfTicketPerVehicle;
+    	
+    	/*List<Ticket> listOfNumberOfTicketPerVehicle = new ArrayList<Ticket>();
+    	for(Ticket vehicleNb : listOfNumberOfTicketPerVehicle ) {
+    		
+    			listOfNumberOfTicketPerVehicle.add(vehicleNb);
+    		
+    		
+     
+    			  
+    			
+    	}
+    	return 	listOfNumberOfTicketPerVehicle;*/
     }
 }
