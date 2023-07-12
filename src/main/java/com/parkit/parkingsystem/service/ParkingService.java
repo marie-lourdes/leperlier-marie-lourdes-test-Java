@@ -117,7 +117,9 @@ public class ParkingService {
             Date outTime = new Date();
             ticket.setOutTime(outTime);
             
+            //ajouté l appel de la methode getNbticket?
             // Apply price discount -5% if the vehicleregNumber is already registered with method calculateFare( ticket, true)
+            MapOfNumberOfTicketPerVehicle = ticketDAO.getNbTicket(ticket,vehicleRegNumber);
             if (MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber) && MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber) > 1 ) {
             	fareCalculatorService.calculateFare(ticket, true);
             } else {
