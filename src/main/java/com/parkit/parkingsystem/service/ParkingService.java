@@ -124,7 +124,7 @@ public class ParkingService {
                 
                 // Apply price discount -5% if the vehicleregNumber is already registered with method calculateFare( ticket, true)
                 MapOfNumberOfTicketPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
-                System.out.println("MapOfNumberOfTicketPerVehicle : "+ MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber));
+                System.out.println("MapOfNumberOfTicketPerVehicle processexitingvehicle : "+ MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber));
                 if (MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber) && MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber) > 1 ) { 	
                 	fareCalculatorService.calculateFare(ticket, true);
                 } else {
