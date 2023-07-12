@@ -95,9 +95,8 @@ public class TicketDAO {
 	// Count number of ticket per vehicle registered by its numberplate registered
 	public Map<String, Integer> getNbTicket(String vehicleRegNumber) {
 		try {
-			//si ticket.getvekiclenumber ou ticket.getticket(vehiclenumber)
-			while(vehicleRegNumber!= null) {
-				MapOfNumberOfTicketPerVehicle.put(vehicleRegNumber, 1);
+			//si while vehiclenumber!= null ou ticket.getvekiclenumber ou ticket.getticket(vehiclenumber)
+			
 				for (Map.Entry<String, Integer> vehicleNb : MapOfNumberOfTicketPerVehicle.entrySet()) {
 					if (vehicleNb.getKey() != vehicleRegNumber) {
 						MapOfNumberOfTicketPerVehicle.put(vehicleRegNumber, 1);
@@ -105,9 +104,7 @@ public class TicketDAO {
 						Integer val = vehicleNb.getValue();
 						MapOfNumberOfTicketPerVehicle.put(vehicleNb.getKey(), val + 1);
 					}
-				}
-			}
-			
+				}	
 
 		} catch (NullPointerException e) {
 			logger.error(" no ticket registered", e);

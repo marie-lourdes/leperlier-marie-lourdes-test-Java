@@ -1,7 +1,6 @@
 package com.parkit.parkingsystem;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -54,7 +53,7 @@ public class ParkingServiceTest {
             ticket.setInTime(new Date(System.currentTimeMillis() - (60*60*1000)));  
             ticket.setParkingSpot(parkingSpot);
             ticket.setVehicleRegNumber("ABCDEF");
-            when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
+            when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
             when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
            
             when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
@@ -68,6 +67,8 @@ public class ParkingServiceTest {
 
     @Test
     public void processExitingVehicleTest(){
+    	Map<String,Integer> MapOfNumberOfTicketPerVehicle = new HashMap<String,Integer>();
+    	when(MapOfNumberOfTicketPerVehicle=ticketDAO.getNbTicket("ABCDEF")).thenReturn(MapOfNumberOfTicketPerVehicle);
         parkingService.processExitingVehicle();
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     }
