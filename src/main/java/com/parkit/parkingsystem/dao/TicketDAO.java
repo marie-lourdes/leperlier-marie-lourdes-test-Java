@@ -94,7 +94,7 @@ public class TicketDAO {
 
 	// Count number of ticket per vehicle registered by its numberplate registered
 	public Map<String, Integer> getNbTicket(Ticket ticket, String vehicleRegNumber) {
-		ticket = new Ticket();
+		//ticket = new Ticket();
 		Ticket vehicleNumber = getTicket(vehicleRegNumber);
 		vehicleNumber.getVehicleRegNumber();
 		if (vehicleNumber != null) {

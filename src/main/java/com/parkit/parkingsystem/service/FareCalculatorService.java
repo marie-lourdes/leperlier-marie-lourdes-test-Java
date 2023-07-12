@@ -33,7 +33,7 @@ public class FareCalculatorService {
         	 duration = Math.floor(duration);  
              System.out.println("duration less than 30 min bike and car reduced to " + duration);     
         }
-          
+        
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
                 ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
@@ -47,8 +47,8 @@ public class FareCalculatorService {
             }
             default: throw new IllegalArgumentException("Unkown Parking Type");
         }
-           
-        calculateFare(ticket, true);
+        
+        calculateFare(ticket, false);    
     }
     
     public double calculateDurationOfParking(long inHour, long outHour, double duration) {

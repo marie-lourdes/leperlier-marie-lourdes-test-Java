@@ -31,8 +31,7 @@ public class ParkingServiceTest {
 
 	private static FareCalculatorService fareCalculatorService;
     private static ParkingService parkingService;
-    private static Map<String, Integer> MapOfNumberOfTicketPerVehicle;
-
+    
     @Mock
     private static InputReaderUtil inputReaderUtil;
     @Mock
@@ -46,19 +45,18 @@ public class ParkingServiceTest {
     }
 
     @BeforeEach
-    //add static?
     private void setUpPerTest() {
         try {
             when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-
+        
             ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,true);
             Ticket ticket = new Ticket();
-            ticket.setInTime(new Date(System.currentTimeMillis() - (60*60*1000)));
+            ticket.setInTime(new Date(System.currentTimeMillis() - (60*60*1000)));  
             ticket.setParkingSpot(parkingSpot);
             ticket.setVehicleRegNumber("ABCDEF");
             when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
             when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
-
+           
             when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
             parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -70,10 +68,7 @@ public class ParkingServiceTest {
 
     @Test
     public void processExitingVehicleTest(){
-    	MapOfNumberOfTicketPerVehicle = new HashMap <String,Integer>();
-    	when(ticketDAO.getNbTicket(any(Ticket.class),anyString())).thenReturn(MapOfNumberOfTicketPerVehicle);
         parkingService.processExitingVehicle();
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     }
-
 }

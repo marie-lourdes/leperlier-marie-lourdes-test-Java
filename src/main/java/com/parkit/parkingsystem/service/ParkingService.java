@@ -116,26 +116,15 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-          /*  
-          //
-            // Apply price discount -5% if the vehicleregNumber is already registered with method calculateFare( ticket, true)
-            MapOfNumberOfTicketPerVehicle = ticketDAO.getNbTicket(ticket,vehicleRegNumber);
-            System.out.println("MapOfNumberOfTicketPerVehicle : "+ MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber));
-            if (MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber) && MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber) > 1 ) {
-            	fareCalculatorService.calculateFare(ticket, true);
-            } else {
-            	 fareCalculatorService.calculateFare(ticket);
-            }*/
-           
+                 
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
                 
-              //ajouté l appel de la methode getNbticket?
                 // Apply price discount -5% if the vehicleregNumber is already registered with method calculateFare( ticket, true)
                 MapOfNumberOfTicketPerVehicle = ticketDAO.getNbTicket(ticket,vehicleRegNumber);
-                System.out.println("MapOfNumberOfTicketPerVehicle : "+ MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber));
+                System.out.println("MapOfNumberOfTicketPerVehicle processExitingVehicle : "+ MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber));
                 if (MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber) && MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber) > 1 ) {
                 	fareCalculatorService.calculateFare(ticket, true);
                 } else {
