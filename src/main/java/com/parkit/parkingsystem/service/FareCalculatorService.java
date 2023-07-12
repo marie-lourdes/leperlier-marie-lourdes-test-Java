@@ -48,7 +48,7 @@ public class FareCalculatorService {
             default: throw new IllegalArgumentException("Unkown Parking Type");
         }
            
-        calculateFare(ticket, false);
+        calculateFare(ticket, true);
     }
     
     public double calculateDurationOfParking(long inHour, long outHour, double duration) {
@@ -60,10 +60,9 @@ public class FareCalculatorService {
     }
 
 	public void calculateFare(Ticket ticket, boolean discount) {
-		if (duration > rateHourOf30minutes) {
+		if (duration > rateHourOf30minutes && discount == true) {
 			// TODO Auto-generated method stub
-			boolean hasTicketDiscount = discount;
-			double ticketDiscountPrice = hasTicketDiscount ? 0.95 * ticket.getPrice() : ticket.getPrice();
+			double ticketDiscountPrice = 0.95 * ticket.getPrice();
 			ticket.setPrice(ticketDiscountPrice);
 			System.out.println("ticket price discount" + ticket.getPrice());
         }
