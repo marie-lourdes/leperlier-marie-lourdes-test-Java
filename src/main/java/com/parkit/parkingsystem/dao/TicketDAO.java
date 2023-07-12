@@ -22,6 +22,8 @@ public class TicketDAO {
 
 	public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
+	Map<String, Integer> MapOfNumberOfTicketPerVehicle = new HashMap<String, Integer>();
+
 	public boolean saveTicket(Ticket ticket) {
 		Connection con = null;
 		try {
@@ -91,27 +93,21 @@ public class TicketDAO {
 	}
 
 	// Count number of ticket per vehicle registered by its numberplate registered
-	public Map<String, Integer> getNbTicket(Ticket ticket, String vehicleRegNumber) {
-		Map<String, Integer> MapOfNumberOfTicketPerVehicle = new HashMap<String, Integer>();
-		//ticket = new Ticket();
-		Ticket vehicleNumber = getTicket(vehicleRegNumber);
-		String ticketVehicleNumber = vehicleNumber.getVehicleRegNumber();
-		System.out.println("ticketVehicleNumber" + ticketVehicleNumber);
-		if (ticketVehicleNumber!= null) {
-			try {
-				for (Map.Entry<String, Integer> vehicleNb : MapOfNumberOfTicketPerVehicle.entrySet()) {
-					if (!MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber)) {
-						MapOfNumberOfTicketPerVehicle.put(vehicleNb.toString(), 1);
-					} else {
-						Integer val = MapOfNumberOfTicketPerVehicle.get(vehicleNb.toString());
-						MapOfNumberOfTicketPerVehicle.put(vehicleNb.toString(), val + 1);
-					}
+	public Map<String, Integer> getNbTicket(String vehicleRegNumber) {
+		try {
+			for (Map.Entry<String, Integer> vehicleNb : MapOfNumberOfTicketPerVehicle.entrySet()) {
+				if (!MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber)) {
+					MapOfNumberOfTicketPerVehicle.put(vehicleRegNumber, 1);
+				} else {
+					Integer val = vehicleNb.getValue();
+					MapOfNumberOfTicketPerVehicle.put(vehicleNb.toString(), val + 1);
 				}
+			}
 
-			} catch (NullPointerException e) {
-				logger.error(" no ticket registered", e);
-			}	
+		} catch (NullPointerException e) {
+			logger.error(" no ticket registered", e);
 		}
+
 		System.out.println("MapOfNumberOfTicketPerVehicle" + MapOfNumberOfTicketPerVehicle);
 		return MapOfNumberOfTicketPerVehicle;
 	}
