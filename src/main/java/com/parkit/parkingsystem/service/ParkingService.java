@@ -54,7 +54,7 @@ public class ParkingService {
                 System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
                 
                 // Get number of ticket and display message if the vehicle is already registered
-                MapOfNumberOfTicketPerVehicle = ticketDAO.getNbTicket(ticket,vehicleRegNumber);
+                MapOfNumberOfTicketPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
                 System.out.println("MapOfNumberOfTicketPerVehicle" + MapOfNumberOfTicketPerVehicle);
                 if (MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber) && MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber)> 1 ) {
                 	System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de\r\n"
@@ -123,7 +123,7 @@ public class ParkingService {
                 parkingSpotDAO.updateParking(parkingSpot);
                 
                 // Apply price discount -5% if the vehicleregNumber is already registered with method calculateFare( ticket, true)
-                MapOfNumberOfTicketPerVehicle = ticketDAO.getNbTicket(ticket,vehicleRegNumber);
+                MapOfNumberOfTicketPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
                 System.out.println("MapOfNumberOfTicketPerVehicle : "+ MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber));
                 if (MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber) && MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber) > 1 ) { 	
                 	fareCalculatorService.calculateFare(ticket, true);
