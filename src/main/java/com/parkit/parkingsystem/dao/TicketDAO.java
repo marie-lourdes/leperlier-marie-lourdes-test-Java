@@ -22,8 +22,6 @@ public class TicketDAO {
 
 	public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
-	Map<String, Integer> MapOfNumberOfTicketPerVehicle = new HashMap<String, Integer>();
-
 	public boolean saveTicket(Ticket ticket) {
 		Connection con = null;
 		try {
@@ -94,17 +92,19 @@ public class TicketDAO {
 
 	// Count number of ticket per vehicle registered by its numberplate registered
 	public Map<String, Integer> getNbTicket(Ticket ticket, String vehicleRegNumber) {
+		Map<String, Integer> MapOfNumberOfTicketPerVehicle = new HashMap<String, Integer>();
 		//ticket = new Ticket();
 		Ticket vehicleNumber = getTicket(vehicleRegNumber);
-		vehicleNumber.getVehicleRegNumber();
-		if (vehicleNumber != null) {
+		String ticketVehicleNumber = vehicleNumber.getVehicleRegNumber();
+		System.out.println("ticketVehicleNumber" + ticketVehicleNumber);
+		if (ticketVehicleNumber!= null) {
 			try {
 				for (Map.Entry<String, Integer> vehicleNb : MapOfNumberOfTicketPerVehicle.entrySet()) {
 					if (!MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber)) {
-						MapOfNumberOfTicketPerVehicle.put(vehicleRegNumber, 1);
+						MapOfNumberOfTicketPerVehicle.put(vehicleNb.toString(), 1);
 					} else {
-						Integer val = MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber);
-						MapOfNumberOfTicketPerVehicle.put(vehicleRegNumber, val + 1);
+						Integer val = MapOfNumberOfTicketPerVehicle.get(vehicleNb.toString());
+						MapOfNumberOfTicketPerVehicle.put(vehicleNb.toString(), val + 1);
 					}
 				}
 
