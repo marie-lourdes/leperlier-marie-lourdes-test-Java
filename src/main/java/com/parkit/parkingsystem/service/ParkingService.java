@@ -125,12 +125,16 @@ public class ParkingService {
 				fareCalculatorService.calculateFare(ticket);
 				// Apply price discount -5% if the vehicleregNumber is already registered with
 				// method calculateFare( ticket, true)
-				/*
-				 * int ticketsPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
-				 * System.out.println("ticketPerVehicle : "+ ticketPerVehicleFromDB); if (
-				 * ticketsPerVehicleFromDB > 1 ) { fareCalculatorService.calculateFare(ticket,
-				 * true); } else { fareCalculatorService.calculateFare(ticket); }
-				 */
+				
+				  int ticketsPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
+				  System.out.println("ticketPerVehicle : "+ ticketsPerVehicleFromDB);
+				  if (ticketsPerVehicleFromDB > 1) { 
+					  fareCalculatorService.calculateFare(ticket,
+				  true); 
+				  } else { 
+					  fareCalculatorService.calculateFare(ticket); 
+				  }
+				 
 
 				// round the decimal number of ticketPrice with a maximum of two digits after
 				// the decimal point
