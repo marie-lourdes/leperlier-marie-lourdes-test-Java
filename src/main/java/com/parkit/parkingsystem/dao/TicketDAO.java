@@ -90,7 +90,9 @@ public class TicketDAO {
 
 	
 	public int getNbTicket(String vehicleRegNumber) {
+		Connection con = null;
 		try {
+			con = dataBaseConfig.getConnection();
 			
 		}catch (Exception ex) {
 			logger.error("Error selecting the number of tickets", ex);
