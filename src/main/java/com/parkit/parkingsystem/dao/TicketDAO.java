@@ -34,8 +34,8 @@ public class TicketDAO {
 			ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
 			ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));
 			return ps.execute();
-		}catch (SQLException e) {
-		      e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
@@ -65,8 +65,8 @@ public class TicketDAO {
 			}
 			dataBaseConfig.closeResultSet(rs);
 			dataBaseConfig.closePreparedStatement(ps);
-		}catch (SQLException e) {
-		      e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
@@ -85,8 +85,8 @@ public class TicketDAO {
 			ps.setInt(3, ticket.getId());
 			ps.execute();
 			return true;
-		}catch (SQLException e) {
-			      e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		} catch (Exception ex) {
 			logger.error("Error saving ticket info", ex);
 		} finally {
@@ -117,8 +117,8 @@ public class TicketDAO {
 			dataBaseConfig.closeResultSet(rs);
 			dataBaseConfig.closePreparedStatement(ps);
 
-		}catch (SQLException e) {
-		      e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		} catch (Exception ex) {
 			logger.error("Error selecting the number of tickets", ex);
 		} finally {
