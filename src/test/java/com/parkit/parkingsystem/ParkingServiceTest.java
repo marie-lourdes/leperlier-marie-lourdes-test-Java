@@ -5,8 +5,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,8 +26,9 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {
 
-	private static FareCalculatorService fareCalculatorService;
+	//private static FareCalculatorService fareCalculatorService;
     private static ParkingService parkingService;
+    private static int ticketsPerVehicleFromDB;
     
     @Mock
     private static InputReaderUtil inputReaderUtil;
@@ -38,17 +37,17 @@ public class ParkingServiceTest {
     @Mock
     private static TicketDAO ticketDAO;
     
-    @BeforeAll
+  /*  @BeforeAll
     private static void setUp() {
         fareCalculatorService = new FareCalculatorService();
-    }
+    }*/
 
     @BeforeEach
     private void setUpPerTest() {
         try {
             when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         
-            ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,true);
+            ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
             Ticket ticket = new Ticket();
             ticket.setInTime(new Date(System.currentTimeMillis() - (60*60*1000)));  
             ticket.setParkingSpot(parkingSpot);
@@ -67,8 +66,8 @@ public class ParkingServiceTest {
 
     @Test
     public void processExitingVehicleTest(){
-    	Map<String,Integer> MapOfNumberOfTicketPerVehicle = new HashMap<String,Integer>();
-    	when(MapOfNumberOfTicketPerVehicle=ticketDAO.getNbTicket("ABCDEF")).thenReturn(MapOfNumberOfTicketPerVehicle);
+    	
+    	//when(ticketsPerVehicleFromDB=ticketDAO.getNbTicket("ABCDEF")).thenReturn(2);
         parkingService.processExitingVehicle();
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     }
