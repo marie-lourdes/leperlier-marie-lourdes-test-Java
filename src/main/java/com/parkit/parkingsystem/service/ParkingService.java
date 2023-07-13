@@ -54,9 +54,9 @@ public class ParkingService {
                 System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
                 
                 // Get number of ticket and display message if the vehicle is already registered
-                MapOfNumberOfTicketPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
-                System.out.println("MapOfNumberOfTicketPerVehicle" + MapOfNumberOfTicketPerVehicle);
-                if (MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber) && MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber)> 1 ) {
+                int ticketsPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
+                System.out.println("ticketsPerVehicleFromDB process incoming vehicle" + ticketsPerVehicleFromDB);
+                if (ticketsPerVehicleFromDB > 1) {
                 	System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de\r\n"
                 			+ "notre parking, vous allez obtenir une remise de 5%");
                 }
@@ -123,13 +123,13 @@ public class ParkingService {
                 parkingSpotDAO.updateParking(parkingSpot);
                 
                 // Apply price discount -5% if the vehicleregNumber is already registered with method calculateFare( ticket, true)
-               int ticketPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
-                System.out.println("ticketPerVehicle : "+ticketPerVehicleFromDB);
-                if ( ticketPerVehicleFromDB > 1 ) { 	
+              /* int ticketsPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
+                System.out.println("ticketPerVehicle : "+ ticketPerVehicleFromDB);
+                if ( ticketsPerVehicleFromDB > 1 ) { 	
                 	fareCalculatorService.calculateFare(ticket, true);
                 } else {
                 	 fareCalculatorService.calculateFare(ticket);
-                }
+                }*/
                 
                 //round the decimal number of ticketPrice with a maximum of two digits after the decimal point
                 // Math.round to round and display in interactive shell the  ticket price type Double with 2 number after coma 
