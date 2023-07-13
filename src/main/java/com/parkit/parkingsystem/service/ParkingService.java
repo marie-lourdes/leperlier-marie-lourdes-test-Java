@@ -53,7 +53,7 @@ public class ParkingService {
                 System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
                 
                 // Get number of ticket and display message if the vehicle is already registered
-                ResultSet ticketsPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
+                int ticketsPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
                 System.out.println("ticketsPerVehicleFromDB process incoming vehicle" + ticketsPerVehicleFromDB);
                 if (ticketsPerVehicleFromDB> 1) {
                 	System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de\r\n"

@@ -3,6 +3,7 @@ package com.parkit.parkingsystem.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 import org.apache.logging.log4j.LogManager;
@@ -33,6 +34,8 @@ public class TicketDAO {
 			ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
 			ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));
 			return ps.execute();
+		}catch (SQLException e) {
+		      e.printStackTrace();
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
@@ -62,6 +65,8 @@ public class TicketDAO {
 			}
 			dataBaseConfig.closeResultSet(rs);
 			dataBaseConfig.closePreparedStatement(ps);
+		}catch (SQLException e) {
+		      e.printStackTrace();
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
@@ -80,6 +85,8 @@ public class TicketDAO {
 			ps.setInt(3, ticket.getId());
 			ps.execute();
 			return true;
+		}catch (SQLException e) {
+			      e.printStackTrace();
 		} catch (Exception ex) {
 			logger.error("Error saving ticket info", ex);
 		} finally {
@@ -96,7 +103,6 @@ public class TicketDAO {
 			PreparedStatement ps = con.prepareStatement(DBConstants.GET_NB_TICKET);
 			ps.setString(1, vehicleRegNumber);
 			ResultSet rs = ps.executeQuery();
-
 			if (rs.next()) {
 				nbTicketsPerVehicle = rs.getInt(1);
 				/*
@@ -111,6 +117,8 @@ public class TicketDAO {
 			dataBaseConfig.closeResultSet(rs);
 			dataBaseConfig.closePreparedStatement(ps);
 
+		}catch (SQLException e) {
+		      e.printStackTrace();
 		} catch (Exception ex) {
 			logger.error("Error selecting the number of tickets", ex);
 		} finally {
