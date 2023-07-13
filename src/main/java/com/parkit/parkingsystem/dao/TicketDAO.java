@@ -88,15 +88,34 @@ public class TicketDAO {
 		return false;
 	}
 
-	
 	public int getNbTicket(String vehicleRegNumber) {
 		Connection con = null;
+		int nbTicketsPerVehicle = 0;
 		try {
 			con = dataBaseConfig.getConnection();
-			
-		}catch (Exception ex) {
+			PreparedStatement ps = con.prepareStatement(DBConstants.GET_NB_TICKET);
+			ps.setString(1, vehicleRegNumber);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				nbTicketsPerVehicle = rs.getInt(1);
+				/*
+				 * ticket = new Ticket(); ParkingSpot parkingSpot = new
+				 * ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)), false);
+				 * ticket.setParkingSpot(parkingSpot); ticket.setId(rs.getInt(2));
+				 * ticket.setVehicleRegNumber(vehicleRegNumber);
+				 * ticket.setPrice(rs.getDouble(3)); ticket.setInTime(rs.getTimestamp(4));
+				 * ticket.setOutTime(rs.getTimestamp(5));
+				 */
+			}
+			dataBaseConfig.closeResultSet(rs);
+			dataBaseConfig.closePreparedStatement(ps);
+
+		} catch (Exception ex) {
 			logger.error("Error selecting the number of tickets", ex);
+		} finally {
+			dataBaseConfig.closeConnection(con);
+			return nbTicketsPerVehicle;
 		}
-		return 0;	
 	}
 }
