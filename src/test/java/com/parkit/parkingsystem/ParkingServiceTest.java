@@ -66,7 +66,7 @@ public class ParkingServiceTest {
 
 	@Test
 	public void processExitingVehicleTest() {
-
+		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
 		// when(ticketsPerVehicleFromDB=ticketDAO.getNbTicket("ABCDEF")).thenReturn(2);
 		parkingService.processExitingVehicle();
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
