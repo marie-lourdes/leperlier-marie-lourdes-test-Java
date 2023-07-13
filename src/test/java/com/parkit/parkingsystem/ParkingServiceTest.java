@@ -54,7 +54,8 @@ public class ParkingServiceTest {
 			ticket.setVehicleRegNumber("ABCDEF");
 			when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
 			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
-			when(ticketsPerVehicleFromDB =ticketDAO.getNbTicket("ABCDEF")).thenReturn(2);
+			ticketsPerVehicleFromDB = ticketDAO.getNbTicket("ABCDEF");
+			when(ticketsPerVehicleFromDB).thenReturn(2);
 
 			when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
