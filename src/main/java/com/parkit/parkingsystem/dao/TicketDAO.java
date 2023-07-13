@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,8 +19,6 @@ public class TicketDAO {
 	private static final Logger logger = LogManager.getLogger("TicketDAO");
 
 	public DataBaseConfig dataBaseConfig = new DataBaseConfig();
-
-	Map<String, Integer> MapOfNumberOfTicketPerVehicle = new HashMap<String, Integer>();
 
 	public boolean saveTicket(Ticket ticket) {
 		Connection con = null;

@@ -1,7 +1,6 @@
 package com.parkit.parkingsystem.service;
 
 import java.util.Date;
-import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,8 +22,7 @@ public class ParkingService {
     private ParkingSpotDAO parkingSpotDAO;
     private  TicketDAO ticketDAO;
     private double shortDoubleTicketPrice;
-    private Map<String, Integer> MapOfNumberOfTicketPerVehicle;
-
+    
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
         this.inputReaderUtil = inputReaderUtil;
         this.parkingSpotDAO = parkingSpotDAO;
@@ -122,6 +120,7 @@ public class ParkingService {
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
                 
+                fareCalculatorService.calculateFare(ticket);
                 // Apply price discount -5% if the vehicleregNumber is already registered with method calculateFare( ticket, true)
               /* int ticketsPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
                 System.out.println("ticketPerVehicle : "+ ticketPerVehicleFromDB);
