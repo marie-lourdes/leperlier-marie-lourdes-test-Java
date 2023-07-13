@@ -123,9 +123,9 @@ public class ParkingService {
                 parkingSpotDAO.updateParking(parkingSpot);
                 
                 // Apply price discount -5% if the vehicleregNumber is already registered with method calculateFare( ticket, true)
-                MapOfNumberOfTicketPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
-                System.out.println("MapOfNumberOfTicketPerVehicle processexitingvehicle : "+ MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber));
-                if (MapOfNumberOfTicketPerVehicle.containsKey(vehicleRegNumber) && MapOfNumberOfTicketPerVehicle.get(vehicleRegNumber) > 1 ) { 	
+               int ticketPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
+                System.out.println("ticketPerVehicle : "+ticketPerVehicleFromDB);
+                if ( ticketPerVehicleFromDB > 1 ) { 	
                 	fareCalculatorService.calculateFare(ticket, true);
                 } else {
                 	 fareCalculatorService.calculateFare(ticket);
