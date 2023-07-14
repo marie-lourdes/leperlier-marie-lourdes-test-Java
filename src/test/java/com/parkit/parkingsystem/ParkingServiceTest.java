@@ -92,9 +92,8 @@ public class ParkingServiceTest {
 
 	@Test
 	public void processExitingVehicleTest() {
-		Ticket ticket = new Ticket();
-		Date outTime = new Date();
-		ticket.setInTime(outTime);
+		
+		
 		
 		parkingService.processExitingVehicle();
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
