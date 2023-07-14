@@ -52,6 +52,7 @@ public class ParkingServiceTest {
 			ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
 			ticket.setParkingSpot(parkingSpot);
 			ticket.setVehicleRegNumber("ABCDEF");
+		
 			when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
 			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 			ticketsPerVehicleFromDB = ticketDAO.getNbTicket("ABCDEF");
@@ -67,6 +68,12 @@ public class ParkingServiceTest {
 	}
 
 	@Test
+	public void processIncomingVehicleTest() {
+		parkingService.processExitingVehicle();
+		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));	
+	}
+	
+	@Test
 	public void processExitingVehicleTest() {
 		Ticket ticket = new Ticket();
 		Date outTime = new Date();
@@ -75,4 +82,6 @@ public class ParkingServiceTest {
 		parkingService.processExitingVehicle();
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 	}
+	
+
 }
