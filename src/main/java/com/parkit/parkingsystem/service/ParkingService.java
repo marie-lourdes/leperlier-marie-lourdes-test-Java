@@ -49,10 +49,7 @@ public class ParkingService {
 				ticket.setInTime(inTime);
 				ticket.setOutTime(null);
 				ticketDAO.saveTicket(ticket);
-				System.out.println("Generated Ticket and saved in DB");
-				System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
-				System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
-
+				
 				// Get number of ticket and display message if the vehicle is already registered
 				int ticketsPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
 				System.out.println("ticketsPerVehicleFromDB process incoming vehicle" + ticketsPerVehicleFromDB);
@@ -60,6 +57,10 @@ public class ParkingService {
 					System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de\r\n"
 							+ "notre parking, vous allez obtenir une remise de 5%");
 				}
+				
+				System.out.println("Generated Ticket and saved in DB");
+				System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
+				System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);		
 			}
 
 		} catch (Exception e) {
