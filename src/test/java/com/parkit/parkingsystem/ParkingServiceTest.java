@@ -29,6 +29,7 @@ public class ParkingServiceTest {
 	// private static FareCalculatorService fareCalculatorService;
 	private static ParkingService parkingService;
 	private static int ticketsPerVehicleFromDB;
+	public static int input;
 
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
@@ -37,14 +38,16 @@ public class ParkingServiceTest {
 	@Mock
 	private static TicketDAO ticketDAO;
 
-	/*
-	 * @BeforeAll private static void setUp() { fareCalculatorService = new
-	 * FareCalculatorService(); }
-	 */
+	 /*@BeforeAll private static void setUp() { //fareCalculatorService = new
+			Ticket ticket = new Ticket();
+			
+	 }*/
+	
 
 	@BeforeEach
 	private void setUpPerTest() {
 		try {
+
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
 			ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
@@ -52,10 +55,11 @@ public class ParkingServiceTest {
 			ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
 			ticket.setParkingSpot(parkingSpot);
 			ticket.setVehicleRegNumber("ABCDEF");
-			//when(ticketDAO.saveTicket(any(Ticket.class))).thenReturn(true);
+
 			when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
 			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
-			
+			ticketsPerVehicleFromDB = ticketDAO.getNbTicket("ABCDEF");
+			when(ticketsPerVehicleFromDB).thenReturn(2);
 
 			when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
@@ -68,9 +72,22 @@ public class ParkingServiceTest {
 
 	@Test
 	public void testProcessIncomingVehicle() {
-		parkingService.processIncomingVehicle();
-		
+		try {
+
+			when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
+
+			when(inputReaderUtil.readSelection()).thenReturn(1);
+
+			parkingService.processIncomingVehicle();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.err.println(e.getMessage());
+		}
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
+		verify(ticketDAO, Mockito.times(1)).saveTicket(any(Ticket.class));
+		
 	}
 
 	@Test
@@ -78,10 +95,8 @@ public class ParkingServiceTest {
 		Ticket ticket = new Ticket();
 		Date outTime = new Date();
 		ticket.setInTime(outTime);
-		ticketsPerVehicleFromDB = ticketDAO.getNbTicket("ABCDEF");
-		when(ticketsPerVehicleFromDB).thenReturn(2);
+		
 		parkingService.processExitingVehicle();
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 	}
-
 }
