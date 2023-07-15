@@ -27,9 +27,7 @@ public class ParkingServiceTest {
 
 	// private static FareCalculatorService fareCalculatorService;
 	private static ParkingService parkingService;
-	private static int ticketsPerVehicleFromDB;
-	public static int input;
-	Ticket ticket;
+	public static Ticket ticket;
 
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
@@ -58,7 +56,7 @@ public class ParkingServiceTest {
 
 			
 		
-			when(ticketDAO.getNbTicket("ABCDEF")).thenReturn(2);
+		
 
 			when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
@@ -76,7 +74,7 @@ public class ParkingServiceTest {
 			when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
 
 			when(inputReaderUtil.readSelection()).thenReturn(1);
-
+			when(ticketDAO.getNbTicket("ABCDEF")).thenReturn(2);
 			parkingService.processIncomingVehicle();
 
 		} catch (Exception e) {
@@ -93,11 +91,12 @@ public class ParkingServiceTest {
 	public void processExitingVehicleTest() {
 		when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
 		when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
+		when(ticketDAO.getNbTicket("ABCDEF")).thenReturn(2);
 		parkingService.processExitingVehicle();
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 	}
 	
-	/*@Test
+	@Test
 	public void  processExitingVehicleTestUnableUpdate() {
 		//Ticket ticket = new Ticket();
 		//when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
@@ -105,5 +104,5 @@ public class ParkingServiceTest {
 		parkingService.processExitingVehicle();
 		assertFalse(ticketDAO.updateTicket(null),"ticket is null");
 		//parkingService.processExitingVehicle();
-	}*/
+	}
 }
