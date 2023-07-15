@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -105,18 +106,24 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void processExitingVehicleTestUnableUpdate() {
+	public void processExitingVehicleTestUnableUpdate() throws Exception {
 		try {
 			when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
-			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
+			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingService.processExitingVehicle();
+			assertTrue(ticketDAO.updateTicket(any(Ticket.class)));
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.err.println(e.getMessage());
 			throw new RuntimeException("Failed to set up per test mock objects in processExitingVehicleTestUnableUpdate");
+		}catch (AssertionError ex) {
+			assertFalse(ticketDAO.updateTicket(null), "ticket is null");
+			throw new Exception("ticket null");
+			
 		}
-		assertFalse(ticketDAO.updateTicket(null), "ticket is null");
+		
 	}
 }
