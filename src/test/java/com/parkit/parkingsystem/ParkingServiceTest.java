@@ -112,18 +112,19 @@ public class ParkingServiceTest {
 			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingService.processExitingVehicle();
+			//assertFalse(ticketDAO.updateTicket(null), "ticket is null");
 			assertTrue(ticketDAO.updateTicket(any(Ticket.class)));
-			
+		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.err.println(e.getMessage());
 			throw new RuntimeException("Failed to set up per test mock objects in processExitingVehicleTestUnableUpdate");
 		}catch (AssertionError ex) {
-			assertFalse(ticketDAO.updateTicket(null), "ticket is null");
-			throw new Exception("ticket null");
+			assertFalse(ticketDAO.updateTicket(null));
+			throw new Error("error updating ticket");
 			
 		}
-		
+	
 	}
 }
