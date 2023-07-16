@@ -109,7 +109,7 @@ public class ParkingServiceTest {
 	@Test
 	public void processExitingVehicleTestUnableUpdate() {
 		try {
-			when(ticketDAO.getTicket("ABCDEF")).thenReturn(null);
+			when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
 			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
 
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -123,7 +123,7 @@ public class ParkingServiceTest {
 					"Failed to set up per test mock objects in processExitingVehicleTestUnableUpdate");
 		} catch (AssertionError ex) {
 			assertFalse(ticketDAO.updateTicket(null));
-			fail("error updating ticket because ticket is null");
+			fail("error updating ticket for exiting vehicle because ticket is null, \n result of updateTicket method " + ex.getMessage());
 		}
 	}
 }
