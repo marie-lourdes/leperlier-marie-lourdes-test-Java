@@ -2,6 +2,7 @@ package com.parkit.parkingsystem;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -122,8 +123,7 @@ public class ParkingServiceTest {
 					"Failed to set up per test mock objects in processExitingVehicleTestUnableUpdate");
 		} catch (AssertionError ex) {
 			assertFalse(ticketDAO.updateTicket(null));
-			throw new Error("error updating ticket");
-
+			fail("error updating ticket because ticket is null");
 		}
 	}
 }
