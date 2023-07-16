@@ -97,7 +97,6 @@ public class ParkingServiceTest {
 
 			parkingService.processExitingVehicle();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.err.println(e.getMessage());
 			throw new RuntimeException("Failed to set up per test mock objects in processExitingVehicleTest");
@@ -114,16 +113,13 @@ public class ParkingServiceTest {
 
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingService.processExitingVehicle();
-			assertTrue(ticketDAO.updateTicket(ticket));
+			assertTrue(ticketDAO.updateTicket(ticket),"error updating ticket for exiting vehicle,\n result of updateTicket method");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.err.println(e.getMessage());
 			throw new RuntimeException(
 					"Failed to set up per test mock objects in processExitingVehicleTestUnableUpdate");
 		} catch (AssertionError ex) {
-			assertFalse(ticketDAO.updateTicket(null));
-			fail("error updating ticket for exiting vehicle because ticket is null, \n result of updateTicket method " + ex.getMessage());
+			fail( ex.getMessage());
 		}
 	}
 }
