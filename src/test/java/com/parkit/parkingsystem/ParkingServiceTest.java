@@ -110,11 +110,10 @@ public class ParkingServiceTest {
 		try {
 			when(ticketDAO.getTicket("ABCDEF")).thenReturn(null);
 			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
+
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingService.processExitingVehicle();
-			// assertFalse(ticketDAO.updateTicket(null), "ticket is null");
 			assertTrue(ticketDAO.updateTicket(ticket));
-
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -126,6 +125,5 @@ public class ParkingServiceTest {
 			throw new Error("error updating ticket");
 
 		}
-
 	}
 }
