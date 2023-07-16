@@ -106,25 +106,20 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void processExitingVehicleTestUnableUpdate() throws Exception {
+	public void processExitingVehicleTestUnableUpdate() {
 		try {
-			when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
-			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
+			when(ticketDAO.getTicket("ABCDEF")).thenReturn(null);
+			 //when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingService.processExitingVehicle();
-			//assertFalse(ticketDAO.updateTicket(null), "ticket is null");
-			assertTrue(ticketDAO.updateTicket(any(Ticket.class)));
-		
+			assertTrue(ticketDAO.updateTicket(ticket));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.err.println(e.getMessage());
-			throw new RuntimeException("Failed to set up per test mock objects in processExitingVehicleTestUnableUpdate");
-		}catch (AssertionError ex) {
+			throw new RuntimeException(
+					"Failed to set up per test mock objects in processExitingVehicleTestUnableUpdate");
+		} catch (AssertionError ex) {
 			assertFalse(ticketDAO.updateTicket(null));
 			throw new Error("error updating ticket");
-			
 		}
-	
 	}
 }
