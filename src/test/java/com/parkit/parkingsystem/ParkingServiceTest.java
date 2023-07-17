@@ -128,8 +128,7 @@ public class ParkingServiceTest {
 		boolean isAvailable = true;
 		parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
-		assertAll(()->assertEquals(parkingNumber, parkingSpot.getId()), ()-> assertEquals( isAvailable, parkingSpot.isAvailable()));
-				
+		assertAll(()->assertEquals(parkingNumber, parkingSpot.getId()), ()-> assertEquals( isAvailable, parkingSpot.isAvailable()));			
 	}
 
 	@Test
@@ -169,6 +168,5 @@ public class ParkingServiceTest {
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
 		}
-
 	}
 }
