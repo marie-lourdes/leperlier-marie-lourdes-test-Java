@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -10,7 +11,6 @@ import static org.mockito.Mockito.when;
 import java.util.Date;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -130,5 +129,24 @@ public class ParkingServiceTest {
 		ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
 		assertEquals(parkingNumber, parkingSpot.getId());
 		assertEquals( isAvailable, parkingSpot.isAvailable());		
+	}
+	
+	@Test
+	public void  testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
+		  
+		   try {
+			   when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(-1);
+			   when(inputReaderUtil.readSelection()).thenReturn(1);
+			   parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+			   ParkingSpot parkingSpot =   parkingService.getNextParkingNumberIfAvailable();
+				assertNotNull(parkingSpot,
+						"error parking number not found, is null");
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(
+						"Failed to set up per test mock objects in testGetNextParkingNumberIfAvailableParkingNumberNotFound");
+			} catch (AssertionError ex) {
+				fail(ex.getMessage());
+			}
 	}
 }
