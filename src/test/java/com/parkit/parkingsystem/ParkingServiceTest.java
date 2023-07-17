@@ -133,8 +133,7 @@ public class ParkingServiceTest {
 	}
 	
 	@Test
-	public void  testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
-		  
+	public void  testGetNextParkingNumberIfAvailableParkingNumberNotFound() {  
 		   try {
 			   /*when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(-1);*/
 			   when(inputReaderUtil.readSelection()).thenReturn(1);
@@ -152,18 +151,16 @@ public class ParkingServiceTest {
 	}
 	
 	@Test
-	public void  testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {
-		/* when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(3);
-		 when(inputReaderUtil.readSelection()).thenReturn(3);
-		 parkingService.getNextParkingNumberIfAvailable();*/
-		 
+	public void  testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {	
+		 int selectionUser=0; 
 	 try {
 		   /*when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(-1);*/
 		   when(inputReaderUtil.readSelection()).thenReturn(3);
+		  selectionUser =inputReaderUtil.readSelection();
 		   parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		     parkingService.getNextParkingNumberIfAvailable();
-			/*assertNotNull(parkingSpot,
-					"error parking number not found, is null");*/
+			assertTrue(selectionUser > 0 && selectionUser <= 2,
+					"wrong argument: "+ selectionUser + "from selection of user in shell of parking type, argument parking type must be 1 or 2");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(
