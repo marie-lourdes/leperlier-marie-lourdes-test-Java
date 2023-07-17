@@ -131,36 +131,18 @@ public class ParkingServiceTest {
 		assertAll(()->assertEquals(parkingNumber, parkingSpot.getId()), ()-> assertEquals( isAvailable, parkingSpot.isAvailable()));
 				
 	}
-	
+
 	@Test
-	public void  testGetNextParkingNumberIfAvailableParkingNumberNotFound() {  
-		   try {
-			   /*when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(-1);*/
-			   when(inputReaderUtil.readSelection()).thenReturn(1);
-			   parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-			   ParkingSpot parkingSpot =   parkingService.getNextParkingNumberIfAvailable();
-				assertNotNull(parkingSpot,
-						"error parking number not found, is null");
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException(
-						"Failed to set up per test mock objects in testGetNextParkingNumberIfAvailableParkingNumberNotFound");
-			} catch (AssertionError ex) {
-				fail(ex.getMessage());
-			}
-	}
-	
-	@Test
-	public void  testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {	
-		 int selectionUser=0; 
-	 try {
-		   /*when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(-1);*/
-		   when(inputReaderUtil.readSelection()).thenReturn(3);
-		  selectionUser =inputReaderUtil.readSelection();
-		   parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-		     parkingService.getNextParkingNumberIfAvailable();
-			assertTrue(selectionUser > 0 && selectionUser <= 2,
-					"wrong argument: "+ selectionUser + "from selection of user in shell of parking type, argument parking type must be 1 or 2");
+	public void testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
+		try {
+			/*
+			 * when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(
+			 * -1);
+			 */
+			when(inputReaderUtil.readSelection()).thenReturn(1);
+			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+			ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+			assertNotNull(parkingSpot, "error parking number not found, is null");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(
@@ -168,6 +150,25 @@ public class ParkingServiceTest {
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
 		}
-		 
+	}
+
+	@Test
+	public void testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {
+		int selectionUser = 0;
+		try {
+			when(inputReaderUtil.readSelection()).thenReturn(3);
+			selectionUser = inputReaderUtil.readSelection();
+			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+			parkingService.getNextParkingNumberIfAvailable();
+			assertTrue(selectionUser > 0 && selectionUser <= 2, "wrong argument: " + selectionUser
+					+ " from selection of user in shell of parking type, argument parking type must be 1 or 2");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(
+					"Failed to set up per test mock objects in testGetNextParkingNumberIfAvailableParkingNumberNotFound");
+		} catch (AssertionError ex) {
+			fail(ex.getMessage());
+		}
+
 	}
 }
