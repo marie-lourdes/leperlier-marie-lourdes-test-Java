@@ -82,7 +82,7 @@ public class ParkingServiceTest {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.err.println(e.getMessage());
+		
 			throw new RuntimeException("Failed to set up per test mock objects in testProcessIncomingVehicle");
 
 		}
@@ -128,5 +128,12 @@ public class ParkingServiceTest {
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
 		}
+	}
+	
+	@Test
+	public void testGetNextParkingNumberIfAvailable() {
+		//parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+	    when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(2);
+		when(inputReaderUtil.readSelection()).thenReturn(2);
 	}
 }
