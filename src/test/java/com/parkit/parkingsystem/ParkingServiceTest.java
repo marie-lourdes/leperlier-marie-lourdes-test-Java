@@ -1,6 +1,5 @@
 package com.parkit.parkingsystem;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -9,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +31,7 @@ public class ParkingServiceTest {
 	// private static FareCalculatorService fareCalculatorService;
 	private static ParkingService parkingService;
 	public static Ticket ticket;
+	private static ParkingSpot parkingSpot;
 
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
@@ -42,7 +43,7 @@ public class ParkingServiceTest {
 	@BeforeAll
 	private static void setUp() { // fareCalculatorService = new
 
-		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+		parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 		ticket = new Ticket();
 		ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
 		ticket.setParkingSpot(parkingSpot);
@@ -59,6 +60,11 @@ public class ParkingServiceTest {
 			e.printStackTrace();
 			throw new RuntimeException("Failed to set up per test the mock object:inputReadUtil");
 		}
+	}
+	
+	@AfterEach
+	public void undefParkingSpot() {
+		 parkingSpot = null;
 	}
 
 	@Test
@@ -113,13 +119,14 @@ public class ParkingServiceTest {
 
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingService.processExitingVehicle();
-			assertTrue(ticketDAO.updateTicket(ticket),"error updating ticket for exiting vehicle,\n result of updateTicket method");
+			assertTrue(ticketDAO.updateTicket(ticket),
+					"error updating ticket for exiting vehicle,\n result of updateTicket method");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(
 					"Failed to set up per test mock objects in processExitingVehicleTestUnableUpdate");
 		} catch (AssertionError ex) {
-			fail( ex.getMessage());
+			fail(ex.getMessage());
 		}
 	}
 }
