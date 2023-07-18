@@ -1,9 +1,9 @@
 package com.parkit.parkingsystem.integration;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
+
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
@@ -41,6 +41,7 @@ public class ParkingDataBaseIT {
 
 	@BeforeAll
 	private static void setUp() throws Exception {
+		
 		parkingSpotDAO = new ParkingSpotDAO();
 		parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
 		ticketDAO = new TicketDAO();
@@ -52,16 +53,9 @@ public class ParkingDataBaseIT {
 	@BeforeEach
     private void setUpPerTest() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(1);
-       // when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-       
-        
-        parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
-  	    ticket = new Ticket();
-  		ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
-  		ticket.setParkingSpot(parkingSpot);
-  		ticket.setVehicleRegNumber("ABCDEF");
-  		ticketDAO.getTicket("ABCDEF");
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
   		dataBasePrepareService.clearDataBaseEntries();
+	
     }
 
 	@AfterAll
@@ -72,11 +66,10 @@ public class ParkingDataBaseIT {
 	@Test
 	public void testParkingACar() {
 		try {
-			// ticketDAO.getTicket("ABCDEF");
+		
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
 			parkingService.processIncomingVehicle();
-
+		
 			// TODO: check that a ticket is actualy saved in DB and Parking table is updated
 			// with availability
 			assertTrue(parkingSpotDAO.updateParking(parkingSpot), "updateParking return false");
