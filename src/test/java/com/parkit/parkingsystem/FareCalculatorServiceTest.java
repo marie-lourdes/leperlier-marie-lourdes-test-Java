@@ -10,8 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-
 import java.util.Date;
 
 public class FareCalculatorServiceTest {
@@ -67,7 +65,7 @@ public class FareCalculatorServiceTest {
 		ticket.setInTime(inTime);
 		ticket.setOutTime(outTime);
 		ticket.setParkingSpot(parkingSpot);
-		assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));
+		assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));	
 	}
 
 	@Test

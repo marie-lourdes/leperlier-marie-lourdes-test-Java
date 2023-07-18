@@ -3,6 +3,7 @@ package com.parkit.parkingsystem;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -11,7 +12,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -101,13 +101,12 @@ public class ParkingServiceTest {
 		try {
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 			when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
-			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
-
+			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);	
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			
 			parkingService.processExitingVehicle();
 			assertTrue(ticketDAO.updateTicket(ticket),
-					"error updating ticket for exiting vehicle,\n result of updateTicket method");
+					"error updating ticket for exiting vehicle,\n result of updateTicket method");		
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(
@@ -118,6 +117,8 @@ public class ParkingServiceTest {
 		verify(parkingSpotDAO, Mockito.times(0)).updateParking(any(ParkingSpot.class));
 		verify(ticketDAO, Mockito.times(1)).getTicket("ABCDEF");
 		verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
+		assertThrows(NullPointerException.class, () -> parkingService.processExitingVehicle());
+		assertThrows(IllegalArgumentException.class, () -> parkingService.processExitingVehicle());
 	}
 
 	@Test
@@ -174,5 +175,6 @@ public class ParkingServiceTest {
 		}
 		
 		verify(inputReaderUtil, Mockito.times(1)).readSelection();
+		assertThrows(IllegalArgumentException.class, () -> parkingService.getNextParkingNumberIfAvailable());
 	}
 }

@@ -2,10 +2,8 @@ package com.parkit.parkingsystem.service;
 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
-import java.util.Calendar;
 
 public class FareCalculatorService {
-	private Ticket ticket;
 	private long inHour;
 	private long outHour;
 	private double duration;
