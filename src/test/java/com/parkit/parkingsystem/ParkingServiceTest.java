@@ -92,7 +92,6 @@ public class ParkingServiceTest {
 			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 			when(ticketDAO.getNbTicket("ABCDEF")).thenReturn(2);
 			
-
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
 			parkingService.processExitingVehicle();
@@ -121,7 +120,7 @@ public class ParkingServiceTest {
 			throw new RuntimeException(
 					"Failed to set up per test mock objects in processExitingVehicleTestUnableUpdate");
 		} catch (AssertionError ex) {
-			System.err.println(ex.getMessage());
+			fail(ex.getMessage());
 		}
 	}
 
@@ -149,7 +148,7 @@ public class ParkingServiceTest {
 			throw new RuntimeException(
 					"Failed to set up per test mock objects in testGetNextParkingNumberIfAvailableParkingNumberNotFound");
 		} catch (AssertionError ex) {
-			System.err.println(ex.getMessage());
+			fail(ex.getMessage());
 		}
 	}
 
@@ -168,7 +167,7 @@ public class ParkingServiceTest {
 			throw new RuntimeException(
 					"Failed to set up per test mock objects in testGetNextParkingNumberIfAvailableParkingNumberNotFound");
 		} catch (AssertionError ex) {
-			System.err.println(ex.getMessage());
+			fail(ex.getMessage());
 		}
 	}
 }
