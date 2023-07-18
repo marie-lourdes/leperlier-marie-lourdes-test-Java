@@ -54,15 +54,9 @@ public class ParkingServiceTest {
 		}
 	}
 
-	@AfterEach
-	public void undefParkingSpot() {
-		parkingSpot = null;
-	}
-
 	@Test
 	public void testProcessIncomingVehicle() {
-		try {
-			
+		try {		
 			when(inputReaderUtil.readSelection()).thenReturn(1);
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");	
 			when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(1);
@@ -72,15 +66,12 @@ public class ParkingServiceTest {
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
 			parkingService.processIncomingVehicle();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Failed to set up per test mock objects in testProcessIncomingVehicle");
 		}
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
-		verify(ticketDAO, Mockito.times(1)).saveTicket(any(Ticket.class));
-	
-		
+		verify(ticketDAO, Mockito.times(1)).saveTicket(any(Ticket.class));	
 	}
 
 	@Test
@@ -101,6 +92,7 @@ public class ParkingServiceTest {
 		}
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 		verify(ticketDAO, Mockito.times(1)).getTicket("ABCDEF");
+		verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
 		verify(ticketDAO, Mockito.times(1)).getNbTicket("ABCDEF");
 	}
 
@@ -112,6 +104,7 @@ public class ParkingServiceTest {
 			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
 
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+			
 			parkingService.processExitingVehicle();
 			assertTrue(ticketDAO.updateTicket(ticket),
 					"error updating ticket for exiting vehicle,\n result of updateTicket method");
@@ -122,6 +115,9 @@ public class ParkingServiceTest {
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
 		}
+		verify(parkingSpotDAO, Mockito.times(0)).updateParking(any(ParkingSpot.class));
+		verify(ticketDAO, Mockito.times(1)).getTicket("ABCDEF");
+		verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
 	}
 
 	@Test
@@ -132,15 +128,19 @@ public class ParkingServiceTest {
 		int parkingNumber = 1;
 		boolean isAvailable = true;
 		parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		
 		ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
-		assertAll(()->assertEquals(parkingNumber, parkingSpot.getId()), ()-> assertEquals( isAvailable, parkingSpot.isAvailable()));			
+		assertAll(()->assertEquals(parkingNumber, parkingSpot.getId()), ()-> assertEquals( isAvailable, parkingSpot.isAvailable()));
+		verify(parkingSpotDAO, Mockito.times(1)).getNextAvailableSlot(any(ParkingType.class));
 	}
 
 	@Test
 	public void testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
 		try {
 			when(inputReaderUtil.readSelection()).thenReturn(1);
+			
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+			
 			ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
 			assertNotNull(parkingSpot, "error parking number not found, is null");
 		} catch (Exception e) {
@@ -150,6 +150,7 @@ public class ParkingServiceTest {
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
 		}
+		verify(parkingSpotDAO, Mockito.times(1)).getNextAvailableSlot(any(ParkingType.class));
 	}
 
 	@Test
@@ -157,9 +158,11 @@ public class ParkingServiceTest {
 		int selectionUser = 0;
 		try {
 			when(inputReaderUtil.readSelection()).thenReturn(3);
-			selectionUser = inputReaderUtil.readSelection();
+			
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+			
 			parkingService.getNextParkingNumberIfAvailable();
+			selectionUser = inputReaderUtil.readSelection();
 			assertTrue(selectionUser > 0 && selectionUser <= 2, "wrong argument: " + selectionUser
 					+ " from selection of user in shell of parking type, argument parking type must be 1 or 2");
 		} catch (Exception e) {
@@ -169,5 +172,7 @@ public class ParkingServiceTest {
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
 		}
+		
+		verify(inputReaderUtil, Mockito.times(1)).readSelection();
 	}
 }
