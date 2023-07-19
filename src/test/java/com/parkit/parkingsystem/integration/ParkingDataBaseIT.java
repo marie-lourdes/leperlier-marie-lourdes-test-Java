@@ -54,10 +54,10 @@ public class ParkingDataBaseIT {
 	        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");	
   		dataBasePrepareService.clearDataBaseEntries();	
     }
+	
 	@AfterEach
 	private void undefUpPerTest() throws Exception {
-	
-		//dataBasePrepareService.clearDataBaseEntries();
+		dataBasePrepareService.clearDataBaseEntries();
 	}
 
 	@AfterAll
@@ -73,10 +73,7 @@ public class ParkingDataBaseIT {
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingSpot = parkingService.getNextParkingNumberIfAvailable();
            
-			Thread.sleep(1000);
-			parkingService.processIncomingVehicle();
-			Thread.sleep(5000);
-			 when(inputReaderUtil.readSelection()).thenReturn(1);
+		
 			parkingService.processIncomingVehicle();
 			
 			// TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
@@ -103,15 +100,21 @@ public class ParkingDataBaseIT {
 
 	@Test
 	public void testParkingLotExit() throws InterruptedException {
+		
 		testParkingACar();
 		
 		//System.out.println("int time ticket"+ticketDAO.getTicket("ABCDEF").getInTime());
 		java.util.Date intTime =  ticketDAO.getTicket("ABCDEF").getInTime();
+		int nbTicket=ticketDAO.getNbTicket("ABCDEF");
+		System.out.println("nb ticket"+ticketDAO.getNbTicket("ABCDEF"));
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		long duration30Min = 30*60*1000;
 		
-			
+		    Thread.sleep(5000);
 			parkingService.processExitingVehicle();
+			Thread.sleep(5000);
+			 when(inputReaderUtil.readSelection()).thenReturn(1);
+			 testParkingACar();
 			
 		// TODO: check that the fare generated and out time are populated correctly in
 				// the database
