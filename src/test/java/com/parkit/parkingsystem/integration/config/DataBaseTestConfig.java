@@ -22,11 +22,11 @@ public class DataBaseTestConfig extends DataBaseConfig {
     	
     	}catch(Exception e) {
     		System.err.println("erreur connexion");
-    		//throw new Exception("erreur connexion");
+    		
     		e.printStackTrace();
     	}
         return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/test","root","rootroot");
+                "jdbc:mysql://localhost:3306/test?serverTimezone=Europe/Paris","root","rootroot");
     }
 
     public void closeConnection(Connection con){
