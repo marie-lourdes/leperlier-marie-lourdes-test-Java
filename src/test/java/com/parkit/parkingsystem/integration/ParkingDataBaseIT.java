@@ -54,10 +54,10 @@ public class ParkingDataBaseIT {
 	        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");	
   		dataBasePrepareService.clearDataBaseEntries();	
     }
-	
 	@AfterEach
 	private void undefUpPerTest() throws Exception {
-		dataBasePrepareService.clearDataBaseEntries();
+	
+		//dataBasePrepareService.clearDataBaseEntries();
 	}
 
 	@AfterAll
@@ -72,9 +72,14 @@ public class ParkingDataBaseIT {
 
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingSpot = parkingService.getNextParkingNumberIfAvailable();
-           
-		
+			
 			parkingService.processIncomingVehicle();
+			
+			
+			Thread.sleep(1000);
+			when(inputReaderUtil.readSelection()).thenReturn(1);
+			parkingService.processIncomingVehicle();
+			Thread.sleep(5000);
 			
 			// TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
 			Ticket ticketSaved = ticketDAO.getTicket("ABCDEF");
@@ -110,16 +115,14 @@ public class ParkingDataBaseIT {
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		long duration30Min = 30*60*1000;
 		
-		    Thread.sleep(5000);
 			parkingService.processExitingVehicle();
-			Thread.sleep(5000);
-			 when(inputReaderUtil.readSelection()).thenReturn(1);
-			 testParkingACar();
+			//Thread.sleep(5000);
+			
 			
 		// TODO: check that the fare generated and out time are populated correctly in
 				// the database
 	
-		//System.out.println("out time ticket"+ticketDAO.getTicket("ABCDEF").getOutTime());
+		System.out.println("out time ticket"+ticketDAO.getTicket("ABCDEF").getOutTime());
 		
 	}
 }
