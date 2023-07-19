@@ -53,8 +53,13 @@ public class ParkingDataBaseIT {
 	@BeforeEach
     private void setUpPerTest() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(1);
-        //when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+    
+		//ticket.setPrice(0);
+		//ticket.setInTime(inTime);
+		//ticket.setOutTime(null);
   		dataBasePrepareService.clearDataBaseEntries();
+  	    
 	
     }
 
@@ -66,10 +71,14 @@ public class ParkingDataBaseIT {
 	@Test
 	public void testParkingACar() {
 		try {
-		
+			parkingSpot = new ParkingSpot(2, ParkingType.CAR, true);
+	       
+			parkingSpotDAO.updateParking(parkingSpot);
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+			
+			;
 			parkingService.processIncomingVehicle();
-		
+		     Thread.sleep(1);
 			// TODO: check that a ticket is actualy saved in DB and Parking table is updated
 			// with availability
 			assertTrue(parkingSpotDAO.updateParking(parkingSpot), "updateParking return false");
@@ -78,6 +87,9 @@ public class ParkingDataBaseIT {
 			System.out.println("ticket saved with availability");
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
