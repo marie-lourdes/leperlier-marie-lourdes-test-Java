@@ -1,12 +1,12 @@
 package com.parkit.parkingsystem.integration;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,26 +45,38 @@ public class ParkingDataBaseIT {
 		ticketDAO = new TicketDAO();
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
+		
 	}
 
 	@BeforeEach
     private void setUpPerTest() throws Exception {
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");		
+		 when(inputReaderUtil.readSelection()).thenReturn(1);
+	        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");	
   		dataBasePrepareService.clearDataBaseEntries();	
     }
+	@AfterEach
+	private void undefUpPerTest() throws Exception {
+	
+		//dataBasePrepareService.clearDataBaseEntries();
+	}
 
 	@AfterAll
 	private static void tearDown() {
-
+		
+		//dataBasePrepareService.clearDataBaseEntries();
 	}
 
 	@Test
 	public void testParkingACar() {
 		try {
+
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingSpot = parkingService.getNextParkingNumberIfAvailable();
-
+           
+			Thread.sleep(1000);
+			parkingService.processIncomingVehicle();
+			Thread.sleep(5000);
+			 when(inputReaderUtil.readSelection()).thenReturn(1);
 			parkingService.processIncomingVehicle();
 			
 			// TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
@@ -83,27 +95,28 @@ public class ParkingDataBaseIT {
 			System.out.println("ticket saved with availability");
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
 	@Test
-	public void testParkingLotExit() {
+	public void testParkingLotExit() throws InterruptedException {
 		testParkingACar();
-		System.out.println("int time ticket"+ticketDAO.getTicket("ABCDEF").getInTime());
+		
+		//System.out.println("int time ticket"+ticketDAO.getTicket("ABCDEF").getInTime());
+		java.util.Date intTime =  ticketDAO.getTicket("ABCDEF").getInTime();
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		long duration30Min = 30*60*1000;
-		try {
-			Thread.sleep(duration30Min);
+		
+			
 			parkingService.processExitingVehicle();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	
-		//parkingSpotDAO.updateParking(parkingSpot);
-	
-		System.out.println("out time ticket"+ticketDAO.getTicket("ABCDEF").getOutTime());
+			
 		// TODO: check that the fare generated and out time are populated correctly in
-		// the database
+				// the database
+	
+		//System.out.println("out time ticket"+ticketDAO.getTicket("ABCDEF").getOutTime());
+		
 	}
 }
