@@ -1,12 +1,9 @@
 package com.parkit.parkingsystem.integration;
 
-
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-
 import static org.mockito.Mockito.when;
-
-import java.util.Date;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -41,7 +38,7 @@ public class ParkingDataBaseIT {
 
 	@BeforeAll
 	private static void setUp() throws Exception {
-		
+
 		parkingSpotDAO = new ParkingSpotDAO();
 		parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
 		ticketDAO = new TicketDAO();
@@ -55,9 +52,7 @@ public class ParkingDataBaseIT {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
     
-		//ticket.setPrice(0);
-		//ticket.setInTime(inTime);
-		//ticket.setOutTime(null);
+		
   		dataBasePrepareService.clearDataBaseEntries();
   	    
 	
@@ -71,25 +66,27 @@ public class ParkingDataBaseIT {
 	@Test
 	public void testParkingACar() {
 		try {
-			parkingSpot = new ParkingSpot(2, ParkingType.CAR, true);
-	       
-			parkingSpotDAO.updateParking(parkingSpot);
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-			
-			;
-			parkingService.processIncomingVehicle();
-		     Thread.sleep(1);
-			// TODO: check that a ticket is actualy saved in DB and Parking table is updated
-			// with availability
-			assertTrue(parkingSpotDAO.updateParking(parkingSpot), "updateParking return false");
-			assertTrue(ticketDAO.saveTicket(ticket), "save ticket return false");
+			parkingSpot = parkingService.getNextParkingNumberIfAvailable();
 
+			parkingService.processIncomingVehicle();
+			
+			// TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
+			Ticket ticketSaved = ticketDAO.getTicket("ABCDEF");
+			//check the time of saving ticket to ensure it's the same ticket
+			System.out.println("ticket saved with time " + ticketSaved.getInTime());
+		    int nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToparkingNumberAlreadySavedInDb = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
+		    System.out.println("nextParkingNumberAvailable after registering the ticket and the parking number is"  + nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToparkingNumberAlreadySavedInDb );  
+			// check if parkingSpotDAO.updateparking return true with call method
+			// isAvailable() in the method
+			assertTrue(parkingSpotDAO.updateParking(parkingSpot), "updateParking return false");
+			//check if the   ticket saved  with  vehicleregnumber returned by the mock inputreaderUtil , requesting the DB 'test" with method getTicket
+			//and request SQL prepared and stocked in constant GET_TICKET
+			assertNotNull(ticketSaved);		
+			assertTrue(nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToparkingNumberAlreadySavedInDb > parkingSpot.getId());
 			System.out.println("ticket saved with availability");
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
