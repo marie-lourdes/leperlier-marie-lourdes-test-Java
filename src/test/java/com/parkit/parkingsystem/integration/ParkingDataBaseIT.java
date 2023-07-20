@@ -76,9 +76,8 @@ public class ParkingDataBaseIT {
 			parkingService.processIncomingVehicle();
 			
 			
-			Thread.sleep(1000);
-			when(inputReaderUtil.readSelection()).thenReturn(1);
-			parkingService.processIncomingVehicle();
+		
+		
 			Thread.sleep(5000);
 			
 			// TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
@@ -116,7 +115,9 @@ public class ParkingDataBaseIT {
 		long duration30Min = 30*60*1000;
 		
 			parkingService.processExitingVehicle();
-			//Thread.sleep(5000);
+			 when(inputReaderUtil.readSelection()).thenReturn(1);
+			testParkingACar();
+			Thread.sleep(5000);
 			
 			
 		// TODO: check that the fare generated and out time are populated correctly in

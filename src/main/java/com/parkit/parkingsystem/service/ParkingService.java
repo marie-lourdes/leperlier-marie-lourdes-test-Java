@@ -50,6 +50,9 @@ public class ParkingService {
 
 				// Get number of ticket and display message if the vehicle is already registered
 				int ticketsPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
+				//long inHour = ticket.getInTime().getTime();
+				//long outHour = ticket.getOutTime().getTime();
+				//double duration = fareCalculatorService.calculateDurationOfParking(ticketsPerVehicleFromDB, inHour, timeExitingVehicle)
 				System.out.println("ticketsPerVehicleFromDB process incoming vehicle" + ticketsPerVehicleFromDB);
 				if (ticketsPerVehicleFromDB > 1) {
 					System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de\r\n"
