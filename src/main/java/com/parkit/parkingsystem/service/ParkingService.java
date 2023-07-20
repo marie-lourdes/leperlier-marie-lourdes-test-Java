@@ -22,6 +22,7 @@ public class ParkingService {
 	private ParkingSpotDAO parkingSpotDAO;
 	private TicketDAO ticketDAO;
 	private double shortDoubleTicketPrice;
+	private double duration;
 
 	public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO) {
 		this.inputReaderUtil = inputReaderUtil;
@@ -52,9 +53,10 @@ public class ParkingService {
 				int ticketsPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
 				//long inHour = ticket.getInTime().getTime();
 				//long outHour = ticket.getOutTime().getTime();
-				//double duration = fareCalculatorService.calculateDurationOfParking(ticketsPerVehicleFromDB, inHour, timeExitingVehicle)
+				duration = fareCalculatorService.getDurationOfParking();
+						
 				System.out.println("ticketsPerVehicleFromDB process incoming vehicle" + ticketsPerVehicleFromDB);
-				if (ticketsPerVehicleFromDB > 1) {
+				if (ticketsPerVehicleFromDB > 1 && duration > 0.5) {
 					System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de\r\n"
 							+ "notre parking, vous allez obtenir une remise de 5%");
 				}
@@ -130,7 +132,8 @@ public class ParkingService {
 
 				int ticketsPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
 				System.out.println("ticketPerVehicle : " + ticketsPerVehicleFromDB);
-				if (ticketsPerVehicleFromDB > 1) {
+				duration = fareCalculatorService.getDurationOfParking();
+				if (ticketsPerVehicleFromDB > 1 && duration > 0.5) {
 					fareCalculatorService.calculateFare(ticket, true);
 				}
 
