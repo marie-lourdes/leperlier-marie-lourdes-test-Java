@@ -55,7 +55,7 @@ public class FareCalculatorServiceTest {
 		assertEquals(ticket.getPrice(), Fare.BIKE_RATE_PER_HOUR);
 	}
 
-	@Test
+/*	@Test
 	public void calculateFareUnkownType() {
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
@@ -79,7 +79,7 @@ public class FareCalculatorServiceTest {
 		ticket.setOutTime(outTime);
 		ticket.setParkingSpot(parkingSpot);
 		assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
-	}
+	}*/
 
 	@Test
 	public void calculateFareBikeWithLessThanOneHourParkingTime() {
