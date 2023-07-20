@@ -33,7 +33,7 @@ public class ParkingDataBaseIT {
 	private static DataBasePrepareService dataBasePrepareService;
 	private static Ticket ticket;
 	private static ParkingSpot parkingSpot;
-	//private ParkingService parkingService;
+	// private ParkingService parkingService;
 
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
@@ -45,7 +45,7 @@ public class ParkingDataBaseIT {
 		ticketDAO = new TicketDAO();
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
-		
+
 	}
 
 	@BeforeEach
@@ -54,16 +54,17 @@ public class ParkingDataBaseIT {
 	        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");	
   		dataBasePrepareService.clearDataBaseEntries();	
     }
+
 	@AfterEach
 	private void undefUpPerTest() throws Exception {
-	
-		//dataBasePrepareService.clearDataBaseEntries();
+
+		// dataBasePrepareService.clearDataBaseEntries();
 	}
 
 	@AfterAll
 	private static void tearDown() {
-		
-		//dataBasePrepareService.clearDataBaseEntries();
+
+		// dataBasePrepareService.clearDataBaseEntries();
 	}
 
 	@Test
@@ -72,27 +73,30 @@ public class ParkingDataBaseIT {
 
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingSpot = parkingService.getNextParkingNumberIfAvailable();
-			
+
 			parkingService.processIncomingVehicle();
-			
-			
-		
-		
 			Thread.sleep(5000);
-			
-			// TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
+			parkingService.processIncomingVehicle();
+			Thread.sleep(5000);
+			// TODO: check that a ticket is actualy saved in DB and Parking table is updated
+			// with availability
 			Ticket ticketSaved = ticketDAO.getTicket("ABCDEF");
-			//check the time of saving ticket to ensure it's the same ticket
+			// check the time of saving ticket to ensure it's the same ticket
 			System.out.println("ticket saved with time " + ticketSaved.getInTime());
-		    int nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToparkingNumberAlreadySavedInDb = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
-		    System.out.println("nextParkingNumberAvailable after registering the ticket and the parking number is"  + nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToparkingNumberAlreadySavedInDb );  
+			int nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToparkingNumberAlreadySavedInDb = parkingSpotDAO
+					.getNextAvailableSlot(ParkingType.CAR);
+			System.out.println("nextParkingNumberAvailable after registering the ticket and the parking number is"
+					+ nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToparkingNumberAlreadySavedInDb);
 			// check if parkingSpotDAO.updateparking return true with call method
 			// isAvailable() in the method
 			assertTrue(parkingSpotDAO.updateParking(parkingSpot), "updateParking return false");
-			//check if the   ticket saved  with  vehicleregnumber returned by the mock inputreaderUtil , requesting the DB 'test" with method getTicket
-			//and request SQL prepared and stocked in constant GET_TICKET
-			assertNotNull(ticketSaved);		
-			assertTrue(nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToparkingNumberAlreadySavedInDb > parkingSpot.getId());
+			// check if the ticket saved with vehicleregnumber returned by the mock
+			// inputreaderUtil , requesting the DB 'test" with method getTicket
+			// and request SQL prepared and stocked in constant GET_TICKET
+			assertNotNull(ticketSaved);
+			assertTrue(
+					nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToparkingNumberAlreadySavedInDb > parkingSpot
+							.getId());
 			System.out.println("ticket saved with availability");
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
@@ -104,26 +108,23 @@ public class ParkingDataBaseIT {
 
 	@Test
 	public void testParkingLotExit() throws InterruptedException {
-		
+
 		testParkingACar();
-		
-		//System.out.println("int time ticket"+ticketDAO.getTicket("ABCDEF").getInTime());
-		java.util.Date intTime =  ticketDAO.getTicket("ABCDEF").getInTime();
-		int nbTicket=ticketDAO.getNbTicket("ABCDEF");
-		System.out.println("nb ticket"+ticketDAO.getNbTicket("ABCDEF"));
+
+		// System.out.println("int time
+		// ticket"+ticketDAO.getTicket("ABCDEF").getInTime());
+		java.util.Date intTime = ticketDAO.getTicket("ABCDEF").getInTime();
+		int nbTicket = ticketDAO.getNbTicket("ABCDEF");
+		System.out.println("nb ticket" + ticketDAO.getNbTicket("ABCDEF"));
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-		long duration30Min = 30*60*1000;
-		
-			parkingService.processExitingVehicle();
-			 when(inputReaderUtil.readSelection()).thenReturn(1);
-			testParkingACar();
-			Thread.sleep(5000);
-			
-			
+		long duration30Min = 30 * 60 * 1000;
+
+		parkingService.processExitingVehicle();
+
 		// TODO: check that the fare generated and out time are populated correctly in
-				// the database
-	
-		System.out.println("out time ticket"+ticketDAO.getTicket("ABCDEF").getOutTime());
-		
+		// the database
+
+		System.out.println("out time ticket" + ticketDAO.getTicket("ABCDEF").getOutTime());
+
 	}
 }
