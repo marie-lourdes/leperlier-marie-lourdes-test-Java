@@ -50,35 +50,51 @@ public class ParkingDataBaseIT {
 
 	@BeforeEach
     private void setUpPerTest() throws Exception {
-		 when(inputReaderUtil.readSelection()).thenReturn(1);
-	        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");	
+		
+		when(inputReaderUtil.readSelection()).thenReturn(1);
+	        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+	        //when(inputReaderUtil.readSelection()).thenReturn(2);
   		dataBasePrepareService.clearDataBaseEntries();	
     }
-	@AfterEach
+/*	@AfterEach
 	private void undefUpPerTest() throws Exception {
-	
+		 
 		//dataBasePrepareService.clearDataBaseEntries();
 	}
 
-	@AfterAll
+/*	@AfterAll
 	private static void tearDown() {
 		
+		/* try {
+			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//dataBasePrepareService.clearDataBaseEntries();
-	}
+	}*/
 
 	@Test
 	public void testParkingACar() {
 		try {
-
+			
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingSpot = parkingService.getNextParkingNumberIfAvailable();
 			
 			parkingService.processIncomingVehicle();
+		
 			
+<<<<<<< Updated upstream
 			
 		
 		
 			Thread.sleep(5000);
+=======
+		/*	Thread.sleep(5000);
+			when(inputReaderUtil.readSelection()).thenReturn(1);
+			parkingService.processIncomingVehicle();
+			Thread.sleep(5000);*/
+>>>>>>> Stashed changes
 			
 			// TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
 			Ticket ticketSaved = ticketDAO.getTicket("ABCDEF");
@@ -114,11 +130,17 @@ public class ParkingDataBaseIT {
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		long duration30Min = 30*60*1000;
 		
+		
+		Thread.sleep(5000);
 			parkingService.processExitingVehicle();
+<<<<<<< Updated upstream
 			 when(inputReaderUtil.readSelection()).thenReturn(1);
 			testParkingACar();
 			Thread.sleep(5000);
 			
+=======
+			Thread.sleep(5000);	
+>>>>>>> Stashed changes
 			
 		// TODO: check that the fare generated and out time are populated correctly in
 				// the database
