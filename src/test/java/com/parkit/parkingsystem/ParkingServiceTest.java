@@ -96,7 +96,7 @@ public class ParkingServiceTest {
 		verify(ticketDAO, Mockito.times(1)).getNbTicket("ABCDEF");
 	}
 
-	/*@Test
+	@Test
 	public void processExitingVehicleTestUnableUpdate() {
 		try {
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
@@ -176,5 +176,5 @@ public class ParkingServiceTest {
 		
 		verify(inputReaderUtil, Mockito.times(1)).readSelection();
 		assertThrows(IllegalArgumentException.class, () -> parkingService.getNextParkingNumberIfAvailable());
-	}*/
+	}
 }
