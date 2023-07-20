@@ -23,6 +23,7 @@ public class ParkingService {
 	private TicketDAO ticketDAO;
 	private double shortDoubleTicketPrice;
 	private double duration;
+	private int ticketsPerVehicle;
 
 	public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO) {
 		this.inputReaderUtil = inputReaderUtil;
@@ -50,13 +51,11 @@ public class ParkingService {
 				ticketDAO.saveTicket(ticket);
 
 				// Get number of ticket and display message if the vehicle is already registered
-				int ticketsPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
-				//long inHour = ticket.getInTime().getTime();
-				//long outHour = ticket.getOutTime().getTime();
+				 ticketsPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
 				duration = fareCalculatorService.getDurationOfParking();
 						
-				System.out.println("ticketsPerVehicleFromDB process incoming vehicle" + ticketsPerVehicleFromDB);
-				if (ticketsPerVehicleFromDB > 1 && duration > 0.5) {
+				System.out.println("ticketsPerVehicle process incoming vehicle" + ticketsPerVehicle);
+				if (ticketsPerVehicle > 1 && duration > 0.5) {
 					System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de\r\n"
 							+ "notre parking, vous allez obtenir une remise de 5%");
 				}
@@ -130,10 +129,10 @@ public class ParkingService {
 				// Apply price discount -5% if the vehicleregNumber is already registered with
 				// method calculateFare( ticket, true)
 
-				int ticketsPerVehicleFromDB = ticketDAO.getNbTicket(vehicleRegNumber);
-				System.out.println("ticketPerVehicle : " + ticketsPerVehicleFromDB);
+				ticketsPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
+				System.out.println("ticketPerVehicle : " + ticketsPerVehicle);
 				duration = fareCalculatorService.getDurationOfParking();
-				if (ticketsPerVehicleFromDB > 1 && duration > 0.5) {
+				if (ticketsPerVehicle > 1 && duration > 0.5) {
 					fareCalculatorService.calculateFare(ticket, true);
 				}
 
