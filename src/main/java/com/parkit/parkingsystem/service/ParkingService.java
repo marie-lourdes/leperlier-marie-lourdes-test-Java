@@ -50,8 +50,8 @@ public class ParkingService {
 				ticket.setOutTime(null);
 				ticketDAO.saveTicket(ticket);
 
-				System.out.println("ticket methode updatetcket outimetypedeDate:  "+ (ticket.getInTime()).getClass().getSimpleName());
-				System.out.println("ticket methode updatetcket outimetypedeDate:  "+ (ticket.getOutTime()).getClass().getSimpleName());
+				System.out.println("ticket methode saveTicket processIncoming inTime typedeDate:  "+ (ticket.getInTime()).getClass().getSimpleName());
+				//System.out.println("ticket methode updatetcket outimetypedeDate:  "+ (ticket.getOutTime()).getClass().getSimpleName());
 				
 				// Get number of ticket and display message if the vehicle is already registered
 				 ticketsPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
@@ -154,7 +154,7 @@ public class ParkingService {
 				System.out.println("Unable to update ticket information. Error occurred");
 			}
 		
-			System.out.println("ticket methode updatetcket outime"+ ticket.getOutTime());
+			System.out.println("ticket methode updateticket exitingVehicle outime"+ ticket.getOutTime());
           	System.out.println("ticket methode updatetcket outimetypedeDate:  "+ (ticket.getOutTime()).getClass().getSimpleName());
           	
 		} catch (Exception e) {
