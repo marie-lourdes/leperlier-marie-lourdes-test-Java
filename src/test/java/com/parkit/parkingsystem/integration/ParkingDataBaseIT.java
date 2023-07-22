@@ -124,19 +124,15 @@ public class ParkingDataBaseIT {
 
 		parkingService.processExitingVehicle();
 
-	/*	Ticket ticketSaved = ticketDAO.getTicket("ABCDEF");
-		// check the time of saving ticket to ensure it's the same ticket
-		System.out.println("ticket saved with outtime " + ticketSaved.getOutTime());
-
 		/*
 		 * Thread.sleep(5000); when(inputReaderUtil.readSelection()).thenReturn(1);
-		 * testParkingACar();
+		 * testParkingACar();*/
 		 
 
 		// TODO: check that the fare generated and out time are populated correctly in
 		// the database
 
-		System.out.println("out time ticket" + ticketDAO.getTicket("ABCDEF").getOutTime());*/
+		System.out.println("out time updated ticket" + ticketDAO.getTicket("ABCDEF").getOutTime());
 
 	}
 }
