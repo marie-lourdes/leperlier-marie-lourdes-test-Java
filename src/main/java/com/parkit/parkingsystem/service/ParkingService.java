@@ -50,6 +50,9 @@ public class ParkingService {
 				ticket.setOutTime(null);
 				ticketDAO.saveTicket(ticket);
 
+				System.out.println("ticket methode updatetcket outimetypedeDate:  "+ (ticket.getInTime()).getClass().getSimpleName());
+				System.out.println("ticket methode updatetcket outimetypedeDate:  "+ (ticket.getOutTime()).getClass().getSimpleName());
+				
 				// Get number of ticket and display message if the vehicle is already registered
 				 ticketsPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
 				duration = fareCalculatorService.getDurationOfParking();
@@ -64,7 +67,6 @@ public class ParkingService {
 				System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
 				System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
 			}
-
 		} catch (Exception e) {
 			logger.error("Unable to process incoming vehicle", e);
 		}
@@ -118,9 +120,10 @@ public class ParkingService {
 			
 			String vehicleRegNumber = getVehichleRegNumber();
 			Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
+			System.out.println("ticket methode getticket outime"+ticket.getOutTime());
 			Date outTime = new Date();
 			ticket.setOutTime(outTime);
-
+			//ticketDAO.updateTicket(ticket);
 			if (ticketDAO.updateTicket(ticket)) {
 				ParkingSpot parkingSpot = ticket.getParkingSpot();
 				parkingSpot.setAvailable(true);
@@ -150,6 +153,10 @@ public class ParkingService {
 			} else {
 				System.out.println("Unable to update ticket information. Error occurred");
 			}
+		
+			System.out.println("ticket methode updatetcket outime"+ ticket.getOutTime());
+          	System.out.println("ticket methode updatetcket outimetypedeDate:  "+ (ticket.getOutTime()).getClass().getSimpleName());
+          	
 		} catch (Exception e) {
 			logger.error("Unable to process exiting vehicle", e);
 		}

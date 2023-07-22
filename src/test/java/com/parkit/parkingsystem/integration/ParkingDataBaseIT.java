@@ -117,8 +117,8 @@ public class ParkingDataBaseIT {
 	public void testParkingLotExit() throws InterruptedException {
 		testParkingACar();
 
-		int nbTicket = ticketDAO.getNbTicket("ABCDEF");
-		System.out.println("nb ticket" + nbTicket);
+		/*int nbTicket = ticketDAO.getNbTicket("ABCDEF");
+		System.out.println("nb ticket" + nbTicket);*/
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		/* long duration30Min = 30*60*1000; */
 

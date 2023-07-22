@@ -65,7 +65,6 @@ public class TicketDAO {
 			}
 			dataBaseConfig.closeResultSet(rs);
 			dataBaseConfig.closePreparedStatement(ps);
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception ex) {
@@ -84,8 +83,7 @@ public class TicketDAO {
 			ps.setDouble(1, ticket.getPrice());
 			ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
 			ps.setInt(3, ticket.getId());
-			ps.execute();
-			System.out.println("ticket methode update"+ ticket.getOutTime());
+			ps.execute();	
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
