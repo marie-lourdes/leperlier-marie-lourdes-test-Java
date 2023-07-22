@@ -86,6 +86,7 @@ public class TicketDAO {
 			ps.setTimestamp(3, new Timestamp(ticket.getOutTime().getTime()));
 			ps.setInt(4, ticket.getId());
 			ps.execute();
+			System.out.println("ticket methode update"+ ticket.getOutTime());
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
