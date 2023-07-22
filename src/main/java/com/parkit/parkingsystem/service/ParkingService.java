@@ -126,8 +126,9 @@ public class ParkingService {
 			Date outTime = new Date();
 			ticket.setOutTime(outTime);
 			// test add call updateTicket
-			ticketDAO.updateTicket(ticket);
-		
+			
+			//ticketDAO.updateTicket(ticket);
+			//boolean ticketupdate =ticketDAO.updateTicket(ticket);
 			if (ticketDAO.updateTicket(ticket)) {
 				ParkingSpot parkingSpot = ticket.getParkingSpot();
 				parkingSpot.setAvailable(true);
