@@ -155,8 +155,8 @@ public class ParkingService {
 			}
 		
 			System.out.println("ticket methode updateticket exitingVehicle outime"+ ticket.getOutTime());
-          	System.out.println("ticket methode updatetcket outimetypedeDate:  "+ (ticket.getOutTime()).getClass().getSimpleName());
-          	
+          	System.out.println("ticket methode updatetcket ouTime typedeDate:  "+ (ticket.getOutTime()).getClass().getSimpleName());
+          	System.out.println("ticket methode updatetcket inTime typedeDate:  "+ (ticket.getInTime()).getClass().getSimpleName());
 		} catch (Exception e) {
 			logger.error("Unable to process exiting vehicle", e);
 		}
