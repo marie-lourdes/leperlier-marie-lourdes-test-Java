@@ -51,7 +51,7 @@ public class ParkingService {
 				ticketDAO.saveTicket(ticket);
 
 				System.out.println("ticket methode saveTicket processIncoming inTime typedeDate:  "+ (ticket.getInTime()).getClass().getSimpleName());
-				//System.out.println("ticket methode updatetcket outimetypedeDate:  "+ (ticket.getOutTime()).getClass().getSimpleName());
+				//System.out.println("ticket methode updatetcket processIncoming outimetypedeDate:  "+ (ticket.getOutTime()).getClass().getSimpleName());
 				
 				// Get number of ticket and display message if the vehicle is already registered
 				 ticketsPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
@@ -120,10 +120,13 @@ public class ParkingService {
 			
 			String vehicleRegNumber = getVehichleRegNumber();
 			Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
-			System.out.println("ticket methode getticket outime"+ticket.getOutTime());
+			
+			System.out.println("ticket methode getticket ExitingVehicle outime  "+ticket.getOutTime());
+		
 			Date outTime = new Date();
 			ticket.setOutTime(outTime);
-			//ticketDAO.updateTicket(ticket);
+			ticketDAO.updateTicket(ticket);
+		
 			if (ticketDAO.updateTicket(ticket)) {
 				ParkingSpot parkingSpot = ticket.getParkingSpot();
 				parkingSpot.setAvailable(true);
@@ -153,10 +156,10 @@ public class ParkingService {
 			} else {
 				System.out.println("Unable to update ticket information. Error occurred");
 			}
-		
-			System.out.println("ticket methode updateticket exitingVehicle outime"+ ticket.getOutTime());
-          	System.out.println("ticket methode updatetcket ouTime typedeDate:  "+ (ticket.getOutTime()).getClass().getSimpleName());
-          	System.out.println("ticket methode updatetcket inTime typedeDate:  "+ (ticket.getInTime()).getClass().getSimpleName());
+			Ticket ticket1 = ticketDAO.getTicket(vehicleRegNumber);
+			System.out.println("ticket methode updateticket exitingVehicle outime"+ ticket1.getOutTime());
+          	System.out.println("ticket methode updatetcket exitingvehicle ouTime typedeDate:  "+ (ticket1.getOutTime()).getClass().getSimpleName());
+          	System.out.println("ticket methode updatetcket exitingvehicle inTime typedeDate:  "+ (ticket1.getInTime()).getClass().getSimpleName());
 		} catch (Exception e) {
 			logger.error("Unable to process exiting vehicle", e);
 		}
