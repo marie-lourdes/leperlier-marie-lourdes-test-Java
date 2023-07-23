@@ -1,11 +1,12 @@
 package com.parkit.parkingsystem.integration;
 
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
+import java.time.Duration;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -77,7 +78,7 @@ public class ParkingDataBaseIT {
 		try {
 			parkingSpot = parkingService.getNextParkingNumberIfAvailable();	
 			parkingService.processIncomingVehicle();
-			Thread.sleep(5000);
+			
 
 			Ticket ticketSavedOutime = ticketDAO.getTicket("ABCDEF");
 			// check the time of saving ticket to ensure it's the same ticket
@@ -114,18 +115,20 @@ public class ParkingDataBaseIT {
 	@Test
 	public void testParkingLotExit() throws InterruptedException {
 		dataBasePrepareService.clearDataBaseEntries();
+		long startedAt = System.nanoTime();
 		testParkingACar();
 		
-		/*int nbTicket = ticketDAO.getNbTicket("ABCDEF");
+		/*int ticket = ticketDAO.getTicket("ABCDEF");
 		System.out.println("nb ticket" + nbTicket);*/
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-		
-		parkingService.processExitingVehicle();
 		Thread.sleep(5000);
+		parkingService.processExitingVehicle();
+		long endedAt = System.nanoTime();
 		
-		// TODO: check that the fare generated and out time are populated correctly in
-		// the database
-
+		//Time converted in rate of Hour
+	    long timeElapsedOfMethodsInRateHour = (endedAt - startedAt)/1000000/1000/60/60;
+		System.out.println("time elapsed of methods in rate Hour " + timeElapsedOfMethodsInRateHour);
+		
 		System.out.println("out time updated ticket" + ticketDAO.getTicket("ABCDEF").getOutTime());
 		
 	}
