@@ -147,9 +147,4 @@ public class ParkingDataBaseIT {
 		// add delay with the second call of processIncomingVehicle
 		Thread.sleep(5000);
 	}
-
-	@Test
-	public void testParkingLotExitRecurringUser() {
-
-	}
 }
