@@ -123,6 +123,7 @@ public class ParkingDataBaseIT {
 			double timeElapsedOfMethodsInRateHour = timeElapsedOfMethodsMilliSeconds / 1000 / 60 / 60;
 			System.out.println("time elapsed of methods in rate Hour " + timeElapsedOfMethodsInRateHour);
 
+			//check if price of ticket in Db 'test' is  correctly calculated according duration and fare for parking type CAR and saved 
 			if (timeElapsedOfMethodsInRateHour < 0.5) {
 				assertEquals(0.0 * Fare.CAR_RATE_PER_HOUR, ticketDAO.getTicket("ABCDEF").getPrice());
 			} else {
@@ -133,7 +134,7 @@ public class ParkingDataBaseIT {
 			// TODO: check that the fare generated and out time are populated correctly in
 			// the database
 
-			// check if the outime during the process exiting vehicle don't return null
+			// check if the outTime updated in Db during the process exiting vehicle don't return null
 			assertNotNull(ticketDAO.getTicket("ABCDEF").getOutTime(),
 					"error updating in DB the outTime of ticket saved should return a date TimeStamp from DB 'test', not Null");
 		} catch (AssertionError e) {
