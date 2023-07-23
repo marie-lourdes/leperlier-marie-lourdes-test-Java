@@ -104,7 +104,6 @@ public class ParkingDataBaseIT {
 	public void testParkingLotExit() throws InterruptedException {
 		dataBasePrepareService.clearDataBaseEntries();
 		try {
-			ticketSaved = ticketDAO.getTicket("ABCDEF");
 			long startedAt = System.currentTimeMillis();
 			testParkingACar();
 			// check if the outime during the process incoming vehicle return null
