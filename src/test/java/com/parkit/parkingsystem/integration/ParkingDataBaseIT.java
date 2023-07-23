@@ -2,12 +2,13 @@ package com.parkit.parkingsystem.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -33,7 +34,7 @@ public class ParkingDataBaseIT {
 	private static DataBasePrepareService dataBasePrepareService;
 	private static Ticket ticket;
 	private static ParkingSpot parkingSpot;
-	// private ParkingService parkingService;
+	private static Ticket ticketSaved;
 
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
@@ -48,30 +49,17 @@ public class ParkingDataBaseIT {
 
 	}
 
-	@BeforeEach
-    private void setUpPerTest() throws Exception {
-		
-		when(inputReaderUtil.readSelection()).thenReturn(1);
-	        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-	        //when(inputReaderUtil.readSelection()).thenReturn(2);
-  		
-    }
 	/*
+	 * @BeforeEach private void setUpPerTest() throws Exception { }
+	 * 
 	 * @AfterEach private void undefUpPerTest() throws Exception {
-	 * 
-	 * //dataBasePrepareService.clearDataBaseEntries(); }
-	 * 
-	 * /* @AfterAll private static void tearDown() {
-	 * 
-	 * /* try {
-	 * when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF"); }
-	 * catch (Exception e) { // TODO Auto-generated catch block e.printStackTrace();
-	 * } //dataBasePrepareService.clearDataBaseEntries(); }
 	 */
 
 	@Test
 	public void testParkingACar() {
 		try {
+			when(inputReaderUtil.readSelection()).thenReturn(1);
+			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingSpot = parkingService.getNextParkingNumberIfAvailable();
 			parkingService.processIncomingVehicle();
@@ -82,25 +70,28 @@ public class ParkingDataBaseIT {
 
 			// TODO: check that a ticket is actualy saved in DB and Parking table is updated
 			// with availability
-			Ticket ticketSaved = ticketDAO.getTicket("ABCDEF");
+			ticketSaved = ticketDAO.getTicket("ABCDEF");
 			// check the time of saving ticket to ensure it's the same ticket
 			System.out.println("ticket saved with intime " + ticketSaved.getInTime());
-			int nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToparkingNumberAlreadySavedInDb = parkingSpotDAO
+			int nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable = parkingSpotDAO
 					.getNextAvailableSlot(ParkingType.CAR);
-			System.out.println("nextParkingNumberAvailable after registering the ticket and the parking number is"
-					+ nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToparkingNumberAlreadySavedInDb);
+			System.out.println(
+					"nextParkingNumberAvailable after registering the ticket and the parking number in DB 'test' is : "
+							+ nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable);
 			// check if parkingSpotDAO.updateparking return true with call method
 			// isAvailable() in the method
-			assertTrue(parkingSpotDAO.updateParking(parkingSpot), "updateParking return false");
-			// check if the ticket saved with vehicleregnumber returned by the mock
-			// inputreaderUtil , requesting the DB 'test" with method getTicket
+			assertTrue(parkingSpotDAO.updateParking(parkingSpot), "updateParking should return true ");
+			// check if the ticket saved with vehicleregnumber, requesting the DB 'test"
+			// with method getTicket(vehicleRegnumber)
 			// and request SQL prepared and stocked in constant GET_TICKET
-			assertNotNull(ticketSaved, "error saving ticket in DB test");
+			assertNotNull(ticketSaved, "error saving ticket in DB 'test' test");
 			assertTrue(
-					nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToparkingNumberAlreadySavedInDb > parkingSpot
+					nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable > parkingSpot
 							.getId(),
-					"error in updating availability with value false  in parking number already saved in DB");
-			System.out.println("ticket saved with availability");
+					"error in updating availability with value false  in parking number already saved in DB should  be superior to ParkingNumber Previously Available and saved in DB with the ticket ");
+
+			System.out.println("ticket saved with availability " + ticketSaved.getParkingSpot().isAvailable()
+					+ " in DB 'test' after registring the incoming vehicle");
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
 		} catch (Exception e) {
@@ -113,9 +104,11 @@ public class ParkingDataBaseIT {
 	public void testParkingLotExit() throws InterruptedException {
 		dataBasePrepareService.clearDataBaseEntries();
 		try {
+			ticketSaved = ticketDAO.getTicket("ABCDEF");
 			long startedAt = System.currentTimeMillis();
 			testParkingACar();
-
+			// check if the outime during the process incoming vehicle return null
+			assertNull(ticketSaved.getOutTime(), "outTime registered in DB 'test' should be null");
 			/*
 			 * int ticket = ticketDAO.getTicket("ABCDEF"); System.out.println("nb ticket" +
 			 * nbTicket);
@@ -139,14 +132,22 @@ public class ParkingDataBaseIT {
 
 			// TODO: check that the fare generated and out time are populated correctly in
 			// the database
+
+			// check if the outime during the process exiting vehicle don't return null
 			assertNotNull(ticketDAO.getTicket("ABCDEF").getOutTime(),
-					"error updating in DB the outTime of ticket saved");
+					"error updating in DB the outTime of ticket saved should return a date TimeStamp from DB 'test', not Null");
 		} catch (AssertionError e) {
 			fail(e.getMessage());
 		}
 
-		System.out.println("out time updated ticket" + ticketDAO.getTicket("ABCDEF").getOutTime());
-		// add delay with the second call of processIncomingVehicle 
+		System.out.println("ticket updated with fare " + ticketDAO.getTicket("ABCDEF").getPrice() + "and outime "
+				+ ticketDAO.getTicket("ABCDEF").getOutTime() + " of ticket in DB 'test'with availability in DB 'test'");
+		// add delay with the second call of processIncomingVehicle
 		Thread.sleep(5000);
+	}
+
+	@Test
+	public void testParkingLotExitRecurringUser() {
+
 	}
 }
