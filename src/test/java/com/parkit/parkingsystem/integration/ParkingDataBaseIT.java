@@ -1,12 +1,10 @@
 package com.parkit.parkingsystem.integration;
 
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
-
-import java.time.Duration;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -72,13 +71,10 @@ public class ParkingDataBaseIT {
 
 	@Test
 	public void testParkingACar() {
-		
-		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
 		try {
-			parkingSpot = parkingService.getNextParkingNumberIfAvailable();	
+			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+			parkingSpot = parkingService.getNextParkingNumberIfAvailable();
 			parkingService.processIncomingVehicle();
-			
 
 			Ticket ticketSavedOutime = ticketDAO.getTicket("ABCDEF");
 			// check the time of saving ticket to ensure it's the same ticket
@@ -99,10 +95,11 @@ public class ParkingDataBaseIT {
 			// check if the ticket saved with vehicleregnumber returned by the mock
 			// inputreaderUtil , requesting the DB 'test" with method getTicket
 			// and request SQL prepared and stocked in constant GET_TICKET
-			assertNotNull(ticketSaved);
+			assertNotNull(ticketSaved, "error saving ticket in DB test");
 			assertTrue(
 					nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToparkingNumberAlreadySavedInDb > parkingSpot
-							.getId());
+							.getId(),
+					"error in updating availability with value false  in parking number already saved in DB");
 			System.out.println("ticket saved with availability");
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
@@ -115,21 +112,41 @@ public class ParkingDataBaseIT {
 	@Test
 	public void testParkingLotExit() throws InterruptedException {
 		dataBasePrepareService.clearDataBaseEntries();
-		long startedAt = System.nanoTime();
-		testParkingACar();
-		
-		/*int ticket = ticketDAO.getTicket("ABCDEF");
-		System.out.println("nb ticket" + nbTicket);*/
-		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-		Thread.sleep(5000);
-		parkingService.processExitingVehicle();
-		long endedAt = System.nanoTime();
-		
-		//Time converted in rate of Hour
-	    long timeElapsedOfMethodsInRateHour = (endedAt - startedAt)/1000000/1000/60/60;
-		System.out.println("time elapsed of methods in rate Hour " + timeElapsedOfMethodsInRateHour);
-		
+		try {
+			long startedAt = System.currentTimeMillis();
+			testParkingACar();
+
+			/*
+			 * int ticket = ticketDAO.getTicket("ABCDEF"); System.out.println("nb ticket" +
+			 * nbTicket);
+			 */
+			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+			Thread.sleep(5000);
+			parkingService.processExitingVehicle();
+			long endedAt = System.currentTimeMillis();
+
+			// Time converted in rate of Hour
+			double timeElapsedOfMethodsMilliSeconds = endedAt - startedAt;
+			double timeElapsedOfMethodsInRateHour = timeElapsedOfMethodsMilliSeconds / 1000 / 60 / 60;
+			System.out.println("time elapsed of methods in rate Hour " + timeElapsedOfMethodsInRateHour);
+
+			if (timeElapsedOfMethodsInRateHour < 0.5) {
+				assertEquals(0.0 * Fare.CAR_RATE_PER_HOUR, ticketDAO.getTicket("ABCDEF").getPrice());
+			} else {
+				assertEquals(timeElapsedOfMethodsInRateHour * Fare.CAR_RATE_PER_HOUR,
+						ticketDAO.getTicket("ABCDEF").getPrice());
+			}
+
+			// TODO: check that the fare generated and out time are populated correctly in
+			// the database
+			assertNotNull(ticketDAO.getTicket("ABCDEF").getOutTime(),
+					"error updating in DB the outTime of ticket saved");
+		} catch (AssertionError e) {
+			fail(e.getMessage());
+		}
+
 		System.out.println("out time updated ticket" + ticketDAO.getTicket("ABCDEF").getOutTime());
-		
+		// add delay with the second call of processIncomingVehicle 
+		Thread.sleep(5000);
 	}
 }
