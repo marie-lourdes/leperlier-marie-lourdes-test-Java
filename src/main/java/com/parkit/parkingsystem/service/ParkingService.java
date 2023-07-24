@@ -153,7 +153,7 @@ public class ParkingService {
 				System.out.println("Unable to update ticket information. Error occurred");
 			}
 			
-		} catch (Exception e) {
+		}catch (Exception e) {
 			logger.error("Unable to process exiting vehicle", e);
 		}
 	}
