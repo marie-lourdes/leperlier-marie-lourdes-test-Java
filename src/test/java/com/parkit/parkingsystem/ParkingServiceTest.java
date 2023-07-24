@@ -10,8 +10,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,11 +28,14 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
+import nl.altindag.log.LogCaptor;
+
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {
 	private static ParkingService parkingService;
 	private static Ticket ticket;
 	private static ParkingSpot parkingSpot;
+	private static LogCaptor logCaptor;
 
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
@@ -40,6 +43,16 @@ public class ParkingServiceTest {
 	private static ParkingSpotDAO parkingSpotDAO;
 	@Mock
 	private static TicketDAO ticketDAO;
+
+	@BeforeAll
+	public static void setupLogCaptor() {
+		logCaptor = LogCaptor.forClass(ParkingService.class);
+	}
+
+	@AfterAll
+	public static void tearDown() {
+		logCaptor.close();
+	}
 
 	@BeforeEach
 	public void setUpPerTest() {
@@ -53,6 +66,11 @@ public class ParkingServiceTest {
 			e.printStackTrace();
 			throw new RuntimeException("Failed to set up per test the mock object : inputReadUtil");
 		}
+	}
+
+	@AfterEach
+	public void clearLogs() {
+		logCaptor.clearLogs();
 	}
 
 	@Test
