@@ -32,7 +32,7 @@ public class TicketDAO {
 			ps.setString(2, ticket.getVehicleRegNumber());
 			ps.setDouble(3, ticket.getPrice());
 			ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
-			ps.setTimestamp(5, (ticket.getOutTime() == null) ? (new Timestamp(0)) : (new Timestamp(ticket.getOutTime().getTime())));
+			ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));
 			return ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
