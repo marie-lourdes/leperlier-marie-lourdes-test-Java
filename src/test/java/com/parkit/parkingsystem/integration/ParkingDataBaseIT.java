@@ -40,7 +40,7 @@ public class ParkingDataBaseIT {
 	private static InputReaderUtil inputReaderUtil;
 
 	@BeforeAll
-	private static void setUp() throws Exception {
+	public static void setUp() throws Exception {
 		parkingSpotDAO = new ParkingSpotDAO();
 		parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
 		ticketDAO = new TicketDAO();
