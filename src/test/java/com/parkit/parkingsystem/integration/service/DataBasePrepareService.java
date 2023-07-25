@@ -26,7 +26,7 @@ public class DataBasePrepareService {
             dataBaseTestConfig.closeConnection(connection);
         }
     }
-    public void simulateTimeDataBaseEntries(){
+    public void simulateInTimeDataBaseEntries(){
         Connection connection = null;
         try{
             connection = dataBaseTestConfig.getConnection();
