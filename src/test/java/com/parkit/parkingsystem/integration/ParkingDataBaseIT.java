@@ -5,15 +5,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -33,23 +38,20 @@ public class ParkingDataBaseIT {
 
 	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 	private static ParkingSpotDAO parkingSpotDAO; 
-	//@Spy
-	//private static ParkingSpot parkingSpotSpied = new ParkingSpot(2,ParkingType.CAR, true);
 	
-	//private static TicketDAO ticketDAO;
 	private static DataBasePrepareService dataBasePrepareService;
-	private static Ticket ticket;
+	//private static Ticket ticket;
 	private static ParkingSpot parkingSpot;
 	private static Ticket ticketSaved;
 	
 	@Spy
 	private static TicketDAO ticketDAO;
-	
+	@Spy
+	private static Ticket ticket = new Ticket();
+	@Spy
+	ParkingService parkingServiceSpied = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
-	
-	
-
 
 	@BeforeAll
 	public static void setUp() throws Exception {
@@ -59,11 +61,17 @@ public class ParkingDataBaseIT {
 		ticketDAO = new TicketDAO();
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
-
+		dataBasePrepareService.clearDataBaseEntries();
 	}
+	
+	/* @AfterAll
+	    private static void tearDown(){
+		 dataBasePrepareService.clearDataBaseEntries();
+	    }
 
 	/*
-	 * @BeforeEach private void setUpPerTest() throws Exception { }
+	 * @BeforeEach private void setUpPerTest() throws Exception { 
+	 * }
 	 * 
 	 * @AfterEach private void undefUpPerTest() throws Exception {
 	 */
@@ -76,8 +84,6 @@ public class ParkingDataBaseIT {
 			
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingSpot = parkingService.getNextParkingNumberIfAvailable();
-		
-		
 		
 			parkingService.processIncomingVehicle();
 
@@ -120,7 +126,7 @@ public class ParkingDataBaseIT {
 
 	@Test
 	public void testParkingLotExit() throws InterruptedException {
-		dataBasePrepareService.clearDataBaseEntries();
+		
 		try {
 			long startedAt = System.currentTimeMillis();
 			testParkingACar();
@@ -130,9 +136,9 @@ public class ParkingDataBaseIT {
 			 * int ticket = ticketDAO.getTicket("ABCDEF"); System.out.println("nb ticket" +
 			 * nbTicket);
 			 */
-
+          /*  Ticket ticket = new Ticket();
 			ticket.setOutTime(new Date(System.currentTimeMillis() + (60 * 60 * 1000)));
-			Mockito.doReturn(true).when(ticketDAO).updateTicket(ticket);
+			when(ticketDAO.updateTicket(ticket)).thenReturn(true);*/
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			Thread.sleep(5000);
 			
@@ -177,8 +183,27 @@ public class ParkingDataBaseIT {
 		
 		try {
 				
+			
 			when(inputReaderUtil.readSelection()).thenReturn(1);
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("GHIJK");
+			parkingSpot = new ParkingSpot(2, ParkingType.CAR, true);
+			 
+			 Date date = new GregorianCalendar(2023, Calendar.JULY, 25, 15, 30, 0).getTime();
+			 System.out.println(date);
+			/*ticket.setParkingSpot(parkingSpot);
+			ticket.setVehicleRegNumber("ABCDEF");
+			ticket.setPrice(0);
+			ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
+			ticket.setOutTime(null);*/
+			
+			/*lenient().doReturn(parkingSpot).when(ticket).getParkingSpot();*/
+			lenient().doReturn("GHIJK").when(ticket).getVehicleRegNumber();
+		/*	lenient().doReturn(0).when(ticket).getPrice();*/
+			lenient().doReturn(new Date(System.currentTimeMillis() - (60 * 60 * 1000))).when(ticket).getInTime();
+			lenient().doReturn(null).when(ticket).getOutTime();
+			lenient().doReturn(true).when(ticketDAO).saveTicket(ticket);
+			
+			
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			//ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.CAR, false);
 			
@@ -188,9 +213,14 @@ public class ParkingDataBaseIT {
 			ticket.setParkingSpot(parkingSpot);
 			ticket.setVehicleRegNumber("GHIJK");*/
 			
+			
+			//System.out.println("date getIntime"+ticket.getInTime());
+			
+			
 			parkingService.processIncomingVehicle();
 			Thread.sleep(5000);
-			
+			lenient().doReturn(true).when(ticketDAO).updateTicket(ticket);
+			parkingSpotDAO.updateParking(parkingSpot);
 			parkingService.processExitingVehicle();
 			
 		} catch (InterruptedException e) {
