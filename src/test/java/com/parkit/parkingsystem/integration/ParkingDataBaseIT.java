@@ -177,9 +177,9 @@ public class ParkingDataBaseIT {
 	public void testParkingLotExitRecurringUser() {
 		
 		try {		
-			when(inputReaderUtil.readSelection()).thenReturn(1);
-			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("GHIJK");
 			
+			when(inputReaderUtil.readSelection()).thenReturn(1);
+			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		
 			parkingService.processIncomingVehicle();
