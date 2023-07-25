@@ -44,12 +44,14 @@ public class ParkingDataBaseIT {
 	private static ParkingSpot parkingSpot;
 	private static Ticket ticketSaved;
 	
+	
+	@Spy
+	private static ParkingSpotDAO parkingSpotDAOSpied = new ParkingSpotDAO(); 
 	@Spy
 	private static TicketDAO ticketDAO;
 	@Spy
 	private static Ticket ticket = new Ticket();
-	@Spy
-	ParkingService parkingServiceSpied = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+	
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
 
@@ -186,7 +188,7 @@ public class ParkingDataBaseIT {
 			
 			when(inputReaderUtil.readSelection()).thenReturn(1);
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("GHIJK");
-			parkingSpot = new ParkingSpot(2, ParkingType.CAR, true);
+			
 			 
 			 Date date = new GregorianCalendar(2023, Calendar.JULY, 25, 15, 30, 0).getTime();
 			 System.out.println(date);
@@ -195,15 +197,17 @@ public class ParkingDataBaseIT {
 			ticket.setPrice(0);
 			ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
 			ticket.setOutTime(null);*/
+				/*lenient().doReturn(parkingSpot).when(ticket).getParkingSpot();*/
+				lenient().doReturn("GHIJK").when(ticket).getVehicleRegNumber();
+			/*	lenient().doReturn(0).when(ticket).getPrice();*/
+				lenient().doReturn(new Date(System.currentTimeMillis() - (60 * 60 * 1000))).when(ticket).getInTime();
+				lenient().doReturn(null).when(ticket).getOutTime();
+				lenient().doReturn(true).when(ticketDAO).saveTicket(ticket);
+				
+				lenient().doReturn(true).when(ticketDAO).updateTicket(ticket);
+				lenient().doReturn(true).when(parkingSpotDAOSpied).updateParking(parkingSpot);
 			
-			/*lenient().doReturn(parkingSpot).when(ticket).getParkingSpot();*/
-			lenient().doReturn("GHIJK").when(ticket).getVehicleRegNumber();
-		/*	lenient().doReturn(0).when(ticket).getPrice();*/
-			lenient().doReturn(new Date(System.currentTimeMillis() - (60 * 60 * 1000))).when(ticket).getInTime();
-			lenient().doReturn(null).when(ticket).getOutTime();
-			lenient().doReturn(true).when(ticketDAO).saveTicket(ticket);
-			
-			
+			parkingSpot = new ParkingSpot(2, ParkingType.CAR, true);
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			//ParkingSpot parkingSpot = new ParkingSpot(1,ParkingType.CAR, false);
 			
@@ -214,13 +218,14 @@ public class ParkingDataBaseIT {
 			ticket.setVehicleRegNumber("GHIJK");*/
 			
 			
-			//System.out.println("date getIntime"+ticket.getInTime());
+		
 			
-			
+		
 			parkingService.processIncomingVehicle();
 			Thread.sleep(5000);
-			lenient().doReturn(true).when(ticketDAO).updateTicket(ticket);
-			parkingSpotDAO.updateParking(parkingSpot);
+			
+		
+			System.out.println("date getIntime"+ticket.getInTime());
 			parkingService.processExitingVehicle();
 			
 		} catch (InterruptedException e) {
