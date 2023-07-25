@@ -5,21 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.parkit.parkingsystem.constants.Fare;
@@ -56,19 +48,20 @@ public class ParkingDataBaseIT {
 		ticketDAO = new TicketDAO();
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
-		dataBasePrepareService.clearDataBaseEntries();
+		
 	}
 	
-	/* @AfterAll
+/*	@AfterAll
 	    private static void tearDown(){
-		 dataBasePrepareService.clearDataBaseEntries();
-	    }
+		 
+	    }*/
 
-	/*
-	 * @BeforeEach private void setUpPerTest() throws Exception { 
-	 * }
-	 * 
-	 * @AfterEach private void undefUpPerTest() throws Exception {
+/*	 @BeforeEach 
+	 private void setUpPerTest() throws Exception { 
+	 dataBasePrepareService.clearDataBaseEntries();
+	 }*/
+	
+	 /* @AfterEach private void undefUpPerTest() throws Exception {
 	 */
 
 	@Test
@@ -121,7 +114,7 @@ public class ParkingDataBaseIT {
 
 	@Test
 	public void testParkingLotExit() throws InterruptedException {
-		
+		dataBasePrepareService.clearDataBaseEntries();
 		try {
 			long startedAt = System.currentTimeMillis();
 			testParkingACar();
@@ -175,7 +168,7 @@ public class ParkingDataBaseIT {
 
 	@Test
 	public void testParkingLotExitRecurringUser() {
-		
+		 dataBasePrepareService.simulateInTimeDataBaseEntries();
 		try {		
 			
 			when(inputReaderUtil.readSelection()).thenReturn(1);
