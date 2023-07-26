@@ -37,7 +37,7 @@ public class DataBasePrepareService {
 			Timestamp dateTimeStamps = new Timestamp(dateInTime.getTime());
 
 			connection.prepareStatement(
-					"insert into ticket(PARKING_NUMBER, VEHICLE_REG_NUMBER, IN_TIME, OUT_TIME) values(2,'ABCDEF','"
+					"insert into ticket(PARKING_NUMBER, VEHICLE_REG_NUMBER, IN_TIME, OUT_TIME) values(2,'GHIJK','"
 							+ dateTimeStamps + "',null)")
 					.execute();
 

@@ -93,7 +93,7 @@ public class ParkingServiceTest {
 		}
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 		verify(ticketDAO, Mockito.times(1)).getTicket("ABCDEF");
-		verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
+		verify(ticketDAO, Mockito.times(2)).updateTicket(any(Ticket.class));
 		verify(ticketDAO, Mockito.times(1)).getNbTicket("ABCDEF");
 	}
 
