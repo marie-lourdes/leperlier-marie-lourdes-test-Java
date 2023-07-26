@@ -45,17 +45,14 @@ public class ParkingDataBaseIT {
 		ticketDAO = new TicketDAO();
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
-		dataBasePrepareService.clearDataBaseEntries();
 	}
 
 	/*
-	 * @AfterAll private static void tearDown(){
-	 * }
+	 * @AfterAll private static void tearDown(){ }
 	 */
 
 	/*
-	 * @BeforeEach private void setUpPerTest() throws Exception {
-	 * }
+	 * @BeforeEach private void setUpPerTest() throws Exception { }
 	 */
 
 	@Test
@@ -91,7 +88,6 @@ public class ParkingDataBaseIT {
 			// with method getTicket(vehicleRegnumber)
 			// and request SQL prepared and stocked in constant GET_TICKET
 			assertNotNull(ticketSaved, "error saving ticket in DB 'test' test");
-
 			assertTrue(
 					nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable > parkingSpot
 							.getId(),
@@ -113,23 +109,18 @@ public class ParkingDataBaseIT {
 		try {
 			long startedAt = System.currentTimeMillis();
 			testParkingACar();
-
-			/*
-			 * int ticket = ticketDAO.getTicket("ABCDEF"); System.out.println("nb ticket" +
-			 * nbTicket);
-			 */
-
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			Thread.sleep(5000);
-
 			parkingService.processExitingVehicle();
 			long endedAt = System.currentTimeMillis();
+			
 			System.out.println("INTIME testparking" + ticketDAO.getTicket("ABCDEF").getInTime());
 			// Time converted in rate of Hour
 			double timeElapsedOfMethodsMilliSeconds = endedAt - startedAt;
 			double timeElapsedOfMethodsInRateHour = timeElapsedOfMethodsMilliSeconds / 1000 / 60 / 60;
 			System.out.println("time elapsed of methods in rate Hour " + timeElapsedOfMethodsInRateHour);
 
+			// TODO: check that the fare generated and out time are populated correctly in the database
 			// check if price of ticket in DB 'test' is correctly calculated according
 			// duration and fare for parking type CAR and saved
 			if (timeElapsedOfMethodsInRateHour < 0.5) {
@@ -138,9 +129,6 @@ public class ParkingDataBaseIT {
 				assertEquals(timeElapsedOfMethodsInRateHour * Fare.CAR_RATE_PER_HOUR,
 						ticketDAO.getTicket("ABCDEF").getPrice());
 			}
-
-			// TODO: check that the fare generated and out time are populated correctly in
-			// the database
 
 			// check if the outTime updated in Db during the process exiting vehicle don't
 			// return null
@@ -159,19 +147,16 @@ public class ParkingDataBaseIT {
 
 	@Test
 	public void testParkingLotExitRecurringUser() throws InterruptedException {
-
+		dataBasePrepareService.clearDataBaseEntries();
 		testParkingLotExit();
 		Thread.sleep(5000);
 		dataBasePrepareService.simulateInTimeDataBaseEntries();
 		try {
-
 			when(inputReaderUtil.readSelection()).thenReturn(1);
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
 			parkingService.processIncomingVehicle();
-			Ticket ticket = ticketDAO.getTicket("ABCDEF");
-
 			parkingService.processExitingVehicle();
 			System.out.println("INTIME testparkingrecurringuser" + ticketDAO.getTicket("ABCDEF").getOutTime());
 
