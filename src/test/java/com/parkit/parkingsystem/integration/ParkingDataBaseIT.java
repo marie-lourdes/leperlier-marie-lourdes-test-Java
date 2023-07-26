@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.parkit.parkingsystem.constants.Fare;
@@ -36,7 +37,8 @@ public class ParkingDataBaseIT {
 	private static ParkingSpot parkingSpot;
 	private static Ticket ticketSaved;
 	private static TicketDAO ticketDAO;
-	
+	@Spy
+	private static TicketDAO ticketDAOSpied = new TicketDAO();
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
 
@@ -48,17 +50,19 @@ public class ParkingDataBaseIT {
 		ticketDAO = new TicketDAO();
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
+		dataBasePrepareService.clearDataBaseEntries();
 		
 	}
 	
 /*	@AfterAll
 	    private static void tearDown(){
-		 
+		  
 	    }*/
 
-/*	 @BeforeEach 
+	/* @BeforeEach 
 	 private void setUpPerTest() throws Exception { 
-	 dataBasePrepareService.clearDataBaseEntries();
+		 
+	
 	 }*/
 	
 	 /* @AfterEach private void undefUpPerTest() throws Exception {
@@ -66,10 +70,11 @@ public class ParkingDataBaseIT {
 
 	@Test
 	public void testParkingACar() {
+		
 		try {
+			
 			when(inputReaderUtil.readSelection()).thenReturn(1);
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-			
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingSpot = parkingService.getNextParkingNumberIfAvailable();
 		
@@ -114,7 +119,7 @@ public class ParkingDataBaseIT {
 
 	@Test
 	public void testParkingLotExit() throws InterruptedException {
-		dataBasePrepareService.clearDataBaseEntries();
+		
 		try {
 			long startedAt = System.currentTimeMillis();
 			testParkingACar();
@@ -132,7 +137,7 @@ public class ParkingDataBaseIT {
 			
 			parkingService.processExitingVehicle();
 			long endedAt = System.currentTimeMillis();
-			
+			System.out.println("INTIME testparking"+ticketDAO.getTicket("ABCDEF").getInTime());
 			// Time converted in rate of Hour
 			double timeElapsedOfMethodsMilliSeconds = endedAt - startedAt;
 			double timeElapsedOfMethodsInRateHour = timeElapsedOfMethodsMilliSeconds / 1000 / 60 / 60;
@@ -146,7 +151,7 @@ public class ParkingDataBaseIT {
 				assertEquals(timeElapsedOfMethodsInRateHour * Fare.CAR_RATE_PER_HOUR,
 						ticketDAO.getTicket("ABCDEF").getPrice());
 			}
-
+			
 			// TODO: check that the fare generated and out time are populated correctly in
 			// the database
 
@@ -162,13 +167,16 @@ public class ParkingDataBaseIT {
 		System.out.println("ticket updated with fare " + ticketDAO.getTicket("ABCDEF").getPrice() + "and outime "
 				+ ticketDAO.getTicket("ABCDEF").getOutTime() + " of ticket in DB 'test'with availability in DB 'test'");
 		// add delay with the second call of processIncomingVehicle
-		Thread.sleep(5000);
+		
 	}
 	
 
 	@Test
-	public void testParkingLotExitRecurringUser() {
-		 dataBasePrepareService.simulateInTimeDataBaseEntries();
+	public void testParkingLotExitRecurringUser() throws InterruptedException {
+	
+		testParkingLotExit();
+		Thread.sleep(5000);
+		dataBasePrepareService.simulateInTimeDataBaseEntries();
 		try {		
 			
 			when(inputReaderUtil.readSelection()).thenReturn(1);
@@ -176,13 +184,14 @@ public class ParkingDataBaseIT {
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		
 			parkingService.processIncomingVehicle();
-			Thread.sleep(5000);	
-			parkingService.processExitingVehicle();
+			Ticket ticket = ticketDAO.getTicket("ABCDEF"); 
+		//lenient().doReturn(true).when(ticketDAOSpied).updateTicket(ticket);
 			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			parkingService.processExitingVehicle();
+			System.out.println("INTIME testparkingrecurringuser"+ticketDAO.getTicket("ABCDEF").getOutTime());
+			
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
