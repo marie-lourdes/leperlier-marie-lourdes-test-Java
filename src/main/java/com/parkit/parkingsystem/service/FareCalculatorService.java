@@ -18,8 +18,8 @@ public class FareCalculatorService {
         // get time in milliseconds for vehicle entrance and vehicle exit 
         inHour = ticket.getInTime().getTime(); 
         outHour = ticket.getOutTime().getTime();
-        duration = calculateDurationOfParking(inHour, outHour, duration);    
-         
+        calculateDurationOfParking(inHour, outHour, duration);    
+        duration = getDurationOfParking();
         // define rate of hour for 30 minutes
         rateHourOf30minutes = 0.50;
         // check if the duration is less or equal to 30 minutes and return boolean type true or false
@@ -49,12 +49,12 @@ public class FareCalculatorService {
         calculateFare(ticket, false);    
     }
     
-    public double calculateDurationOfParking(long inHour, long outHour, double duration) {
+    public void calculateDurationOfParking(long inHour, long outHour, double duration) {
     	// TODO: Some tests are failing here. Need to check if this logic is correct
         duration = outHour - inHour;
         // convert duration milliseconds in rate hour
         duration = duration / 1000 / 60 / 60;      
-        return duration;    
+       this.duration= duration;    
     }
     public double getDurationOfParking() {
     	return duration;
