@@ -153,8 +153,8 @@ public class ParkingDataBaseIT {
 			System.out.println("INTIME testparkingrecurringuser" + ticketDAO.getTicket("ABCDEF").getOutTime());
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException("Failed to set up per test mock object inputReaderUtil in testParkingLotExitRecurringUser");
 		}
 	}
 }
