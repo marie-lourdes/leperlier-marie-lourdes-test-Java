@@ -99,7 +99,7 @@ public class ParkingDataBaseIT {
 			e.printStackTrace();
 			throw new RuntimeException("Failed to set up per test mock object inputReaderUtil in testParkingACar");
 		} catch (AssertionError ex) {
-			System.err.println(ex.getMessage());
+			fail(ex.getMessage());
 		}
 	}
 
@@ -144,7 +144,7 @@ public class ParkingDataBaseIT {
 					"error updating in DB the outTime of ticket saved should return a date TimeStamp from DB 'test', not Null");
 
 		} catch (AssertionError ex) {
-			System.err.println(ex.getMessage());
+			fail(ex.getMessage());
 		}
 
 		System.out.println("ticket updated with fare " + ticketDAO.getTicket("ABCDEF").getPrice() + "and outime "
@@ -185,7 +185,7 @@ public class ParkingDataBaseIT {
 			double rateHourOf30minutes = 0.50;
 			// check the duration is more than 30 minutes
 			assertTrue(duration > rateHourOf30minutes,
-					"the duration shoulb be more than 30 minutes to get price discount");
+					"the duration should be more than 30 minutes to get price discount");
 			// check if the number ticket is more than one ticket
 			int nbTicketOfRecurringUser = ticketDAO.getNbTicket("GHIJK");
 			assertTrue(nbTicketOfRecurringUser > 1,
@@ -196,7 +196,7 @@ public class ParkingDataBaseIT {
 			throw new RuntimeException(
 					"Failed to set up per test mock object inputReaderUtil in testParkingLotExitRecurringUser");
 		} catch (AssertionError ex) {
-			System.err.println(ex.getMessage());
+			fail(ex.getMessage());
 		}
 	}
 }
