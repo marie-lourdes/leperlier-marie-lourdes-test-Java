@@ -168,10 +168,11 @@ public class FareCalculatorServiceTest {
 		ticket.setInTime(inTime);
 		ticket.setOutTime(outTime);
 		ticket.setParkingSpot(parkingSpot);
-		fareCalculatorService.calculateFare(ticket, true);
+	
+		fareCalculatorService.calculateFare(ticket);
 		ticketCarDiscount = 0.95 * (ticket.getPrice());
+		fareCalculatorService.calculateFare(ticket, true);
 		assertEquals(ticketCarDiscount, ticket.getPrice());
-
 	}
 
 	@Test
@@ -186,10 +187,9 @@ public class FareCalculatorServiceTest {
 		ticket.setInTime(inTime);
 		ticket.setOutTime(outTime);
 		ticket.setParkingSpot(parkingSpot);
-		ticketBikeDiscount = 0.95 * (ticket.getPrice());
+		fareCalculatorService.calculateFare(ticket);
+		ticketBikeDiscount = 0.95 * (ticket.getPrice());	
 		fareCalculatorService.calculateFare(ticket, true);
 		assertEquals(ticketBikeDiscount, ticket.getPrice());	
-
 	}
-
 }

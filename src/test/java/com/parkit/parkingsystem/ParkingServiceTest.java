@@ -12,10 +12,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,8 +26,6 @@ import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
-
-
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {
@@ -98,7 +92,7 @@ public class ParkingServiceTest {
 		}
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 		verify(ticketDAO, Mockito.times(1)).getTicket("ABCDEF");
-		verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
+		verify(ticketDAO, Mockito.times(2)).updateTicket(any(Ticket.class));
 		verify(ticketDAO, Mockito.times(1)).getNbTicket("ABCDEF");
 	}
 
@@ -152,6 +146,9 @@ public class ParkingServiceTest {
 
 			ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
 			assertNotNull(parkingSpot, "error parking number not found, is null");
+			//verifier l assertrow et le trhrow dans la methode nextiavailable
+			
+			//assertThrows(Exception.class,()-> parkingService.getNextParkingNumberIfAvailable());	
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(

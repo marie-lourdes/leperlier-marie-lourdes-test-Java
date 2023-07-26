@@ -145,6 +145,8 @@ public class ParkingService {
 				// Double with 2 number after coma
 				double ticketPrice = ticket.getPrice();
 				shortDoubleTicketPrice = Math.round(ticketPrice * 100.0) / 100.0;
+				ticket.setPrice(shortDoubleTicketPrice);
+				ticketDAO.updateTicket(ticket);
 				System.out.println("Please pay the parking fare:" + shortDoubleTicketPrice);
 
 				System.out.println(
