@@ -12,7 +12,6 @@ public class DataBasePrepareService {
 
 	public void clearDataBaseEntries() {
 		Connection connection = null;
-
 		try {
 			connection = dataBaseTestConfig.getConnection();
 
@@ -20,7 +19,6 @@ public class DataBasePrepareService {
 			connection.prepareStatement("update parking set available = true").execute();
 			// clear data entries
 			connection.prepareStatement("truncate table ticket").execute();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -45,7 +43,6 @@ public class DataBasePrepareService {
 
 			// connection.prepareStatement("update ticket set
 			// OUT_TIME='"+dateTimeStamps+"'").execute();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

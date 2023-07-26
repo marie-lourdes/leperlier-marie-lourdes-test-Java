@@ -28,9 +28,7 @@ public class ParkingDataBaseIT {
 
 	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 	private static ParkingSpotDAO parkingSpotDAO;
-
 	private static DataBasePrepareService dataBasePrepareService;
-	// private static Ticket ticket;
 	private static ParkingSpot parkingSpot;
 	private static Ticket ticketSaved;
 	private static TicketDAO ticketDAO;
@@ -48,17 +46,13 @@ public class ParkingDataBaseIT {
 	}
 
 	/*
-	 * @AfterAll private static void tearDown(){ }
-	 */
-
-	/*
-	 * @BeforeEach private void setUpPerTest() throws Exception { }
+	  @AfterAll private static void tearDown(){ }
+	  @BeforeEach private void setUpPerTest() throws Exception { }
 	 */
 
 	@Test
 	public void testParkingACar() {
 		try {
-
 			when(inputReaderUtil.readSelection()).thenReturn(1);
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -141,8 +135,6 @@ public class ParkingDataBaseIT {
 
 		System.out.println("ticket updated with fare " + ticketDAO.getTicket("ABCDEF").getPrice() + "and outime "
 				+ ticketDAO.getTicket("ABCDEF").getOutTime() + " of ticket in DB 'test'with availability in DB 'test'");
-		// add delay with the second call of processIncomingVehicle
-
 	}
 
 	@Test
@@ -164,6 +156,5 @@ public class ParkingDataBaseIT {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 }
