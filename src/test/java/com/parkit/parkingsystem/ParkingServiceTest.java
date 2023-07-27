@@ -108,7 +108,7 @@ public class ParkingServiceTest {
 			parkingService.processExitingVehicle();
 			assertFalse(ticketDAO.updateTicket(ticket),
 					"error updating ticket for exiting vehicle,should be return false not true");
-			 
+		 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

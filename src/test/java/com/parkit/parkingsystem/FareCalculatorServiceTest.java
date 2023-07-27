@@ -57,15 +57,24 @@ public class FareCalculatorServiceTest {
 
 	@Test
 	public void calculateFareUnkownType() {
-		Date inTime = new Date();
-		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
-		Date outTime = new Date();
-		ParkingSpot parkingSpot = new ParkingSpot(1, null, false);
+		try {
+			Date inTime = new Date();
+			inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
+			Date outTime = new Date();
+			ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.DEFAULT, false);
 
-		ticket.setInTime(inTime);
-		ticket.setOutTime(outTime);
-		ticket.setParkingSpot(parkingSpot);
-		assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));	
+			ticket.setInTime(inTime);
+			ticket.setOutTime(outTime);
+			ticket.setParkingSpot(parkingSpot);
+			assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
+			
+		}catch(AssertionError ex) {
+			fail(ex.getMessage());
+		}
+		
+				/*assertThrows(IllegalArgumentException.class, () ->{
+		parkingSpot.getParkingType();
+		});	*/
 	}
 
 	@Test
