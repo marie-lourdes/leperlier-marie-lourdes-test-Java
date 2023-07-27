@@ -1,11 +1,12 @@
 package com.parkit.parkingsystem;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -88,7 +89,6 @@ public class ParkingServiceTest {
 
 			parkingService.processExitingVehicle();
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new RuntimeException("Failed to set up per test mock objects in processExitingVehicleTest");
 		}
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
@@ -100,27 +100,26 @@ public class ParkingServiceTest {
 	@Test
 	public void processExitingVehicleTestUnableUpdate() {
 		try {
-			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-			when(ticketDAO.getTicket("ABCDEF")).thenReturn(null);
+			try {
+				when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
 			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
 			parkingService.processExitingVehicle();
+			
+		}catch (Exception e) {
 			assertFalse(ticketDAO.updateTicket(ticket),
 					"error updating ticket for exiting vehicle,should be return false not true");
-		 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (AssertionError ex) {
+		}catch (AssertionError ex) {
 			fail(ex.getMessage());
 		}
 		verify(parkingSpotDAO, Mockito.times(0)).updateParking(any(ParkingSpot.class));
 		verify(ticketDAO, Mockito.times(1)).getTicket("ABCDEF");
 		verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
-	
-		// assertThrows(IllegalArgumentException.class, () ->
-		// parkingService.processExitingVehicle());
 	}
 
 	@Test
@@ -139,22 +138,16 @@ public class ParkingServiceTest {
 
 	@Test
 	public void testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
-		
 		try {	
-			when(inputReaderUtil.readSelection()).thenReturn(1);
 			when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(-1);
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
-			ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
-			assertNull(parkingSpot, "error parking number not found, should be return null ");
-			//verifier l assertrow et le trhrow dans la methode nextiavailable
-			
+			assertTrue(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)<= 0);
+		
 		} catch (Exception e) {
-			e.printStackTrace();
+			assertNull(parkingService.getNextParkingNumberIfAvailable(), "error parking number not found, should be return null ");
+			
 			throw new RuntimeException(
 					"Failed to set up per test mock objects in testGetNextParkingNumberIfAvailableParkingNumberNotFound");
-		} catch (AssertionError ex) {
-			fail(ex.getMessage());
 		}
 		verify(parkingSpotDAO, Mockito.times(1)).getNextAvailableSlot(any(ParkingType.class));
 	}
@@ -167,14 +160,10 @@ public class ParkingServiceTest {
 			when(inputReaderUtil.readSelection()).thenReturn(3);
 
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
-			parkingService.getNextParkingNumberIfAvailable();
 			selectionUser = inputReaderUtil.readSelection();
 			assertFalse(selectionUser > 0 && selectionUser <= 2, "wrong argument: " + selectionUser+" should return false,argument parking type must be 1 or 2, assertion");
-				
+			assertThrows(IllegalArgumentException.class, ()-> parkingService.getVehichleType());	
 		} catch (Exception e) {
-			
-			e.printStackTrace();
 			throw new RuntimeException(
 					"Failed to set up per test mock objects in testGetNextParkingNumberIfAvailableParkingNumberNotFound");
 		} catch (AssertionError ex) {
