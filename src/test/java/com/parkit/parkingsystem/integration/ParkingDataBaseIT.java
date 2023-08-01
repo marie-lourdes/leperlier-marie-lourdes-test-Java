@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
@@ -13,6 +15,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.parkit.parkingsystem.constants.Fare;
@@ -31,21 +35,27 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 public class ParkingDataBaseIT {
 
 	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
-	private static ParkingSpotDAO parkingSpotDAO;
+	//private static ParkingSpotDAO parkingSpotDAO;
 	private static DataBasePrepareService dataBasePrepareService;
 	private static ParkingSpot parkingSpot;
 	private static Ticket ticketSaved;
-	private static TicketDAO ticketDAO;
+	//private static TicketDAO ticketDAO;
 	private static FareCalculatorService fareCalculatorService;
 
+	@Spy
+	private static ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
+
+	@Spy
+	private static TicketDAO ticketDAO = new TicketDAO();
+	
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
 
 	@BeforeAll
 	public static void setUp() throws Exception {
-		parkingSpotDAO = new ParkingSpotDAO();
+		//parkingSpotDAO = new ParkingSpotDAO();
 		parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
-		ticketDAO = new TicketDAO();
+		//ticketDAO = new TicketDAO();
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
 	}
@@ -80,9 +90,16 @@ public class ParkingDataBaseIT {
 			// TODO: check that a ticket is actualy saved in DB and Parking table is updated
 			// with availability
 			ticketSaved = ticketDAO.getTicket("ABCDEF");
-
-			// assertTrue(ticketDAO.saveTicket(ticket), "saveTicket should be retrun true
-			// ");
+			
+		/*	Date inTime = new Date();
+             Ticket ticket = new Ticket();
+             ticket.setParkingSpot(parkingSpot);
+				ticket.setVehicleRegNumber("ABCDEF");
+				ticket.setPrice(0);
+				ticket.setInTime(inTime);
+				ticket.setOutTime(null);*/
+			 verify(ticketDAO,Mockito.times(1)).saveTicket(any(Ticket.class));
+			
 			// check if the ticket saved with vehicleregnumber, requesting the DB 'test"
 			// with method getTicket(vehicleRegnumber)
 			// and request SQL prepared and stocked in constant GET_TICKET
