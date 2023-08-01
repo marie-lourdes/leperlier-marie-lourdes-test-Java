@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,9 +50,15 @@ public class ParkingDataBaseIT {
 		dataBasePrepareService = new DataBasePrepareService();
 	}
 
+	// free up the resource used with the classes needed to connect to the database
+	@AfterAll
+	private static void tearDown() {
+		parkingSpotDAO.dataBaseConfig = null;
+		ticketDAO.dataBaseConfig = null;
+		dataBasePrepareService = null;
+	}
+
 	/*
-	 * @AfterAll private static void tearDown(){ }
-	 * 
 	 * @BeforeEach private void setUpPerTest() throws Exception { }
 	 */
 
@@ -74,7 +81,8 @@ public class ParkingDataBaseIT {
 			// with availability
 			ticketSaved = ticketDAO.getTicket("ABCDEF");
 
-			//assertTrue(ticketDAO.saveTicket(ticket), "saveTicket should be retrun true ");
+			// assertTrue(ticketDAO.saveTicket(ticket), "saveTicket should be retrun true
+			// ");
 			// check if the ticket saved with vehicleregnumber, requesting the DB 'test"
 			// with method getTicket(vehicleRegnumber)
 			// and request SQL prepared and stocked in constant GET_TICKET

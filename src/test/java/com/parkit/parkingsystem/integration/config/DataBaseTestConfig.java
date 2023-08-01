@@ -29,7 +29,7 @@ public class DataBaseTestConfig extends DataBaseConfig {
                 "jdbc:mysql://localhost:3306/test?serverTimezone=Europe/Paris","root","rootroot");
     }
 
-    public void closeConnection(Connection con){
+    public void closeConnection(Connection con) {
         if(con!=null){
             try {
                 con.close();
