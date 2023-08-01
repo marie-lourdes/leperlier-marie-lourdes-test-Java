@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,11 +36,11 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 public class ParkingDataBaseIT {
 
 	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
-	//private static ParkingSpotDAO parkingSpotDAO;
+	// private static ParkingSpotDAO parkingSpotDAO;
 	private static DataBasePrepareService dataBasePrepareService;
 	private static ParkingSpot parkingSpot;
 	private static Ticket ticketSaved;
-	//private static TicketDAO ticketDAO;
+	// private static TicketDAO ticketDAO;
 	private static FareCalculatorService fareCalculatorService;
 
 	@Spy
@@ -47,15 +48,15 @@ public class ParkingDataBaseIT {
 
 	@Spy
 	private static TicketDAO ticketDAO = new TicketDAO();
-	
+
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
 
 	@BeforeAll
 	public static void setUp() throws Exception {
-		//parkingSpotDAO = new ParkingSpotDAO();
+		// parkingSpotDAO = new ParkingSpotDAO();
 		parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
-		//ticketDAO = new TicketDAO();
+		// ticketDAO = new TicketDAO();
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
 	}
@@ -81,25 +82,17 @@ public class ParkingDataBaseIT {
 			parkingSpot = parkingService.getNextParkingNumberIfAvailable();
 
 			parkingService.processIncomingVehicle();
+			// TODO: check that a ticket is actualy saved in DB and Parking table is updated
+			// with availability
+			verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
+			verify(ticketDAO, Mockito.times(1)).saveTicket(any(Ticket.class));
 
 			Ticket ticketSavedOutime = ticketDAO.getTicket("ABCDEF");
 			// Log the outTime null during saving ticket to ensure it's the same ticket
-
 			System.out.println("ticket saved with outTime  " + ticketSavedOutime.getOutTime());
-
-			// TODO: check that a ticket is actualy saved in DB and Parking table is updated
-			// with availability
 			ticketSaved = ticketDAO.getTicket("ABCDEF");
-			
-		/*	Date inTime = new Date();
-             Ticket ticket = new Ticket();
-             ticket.setParkingSpot(parkingSpot);
-				ticket.setVehicleRegNumber("ABCDEF");
-				ticket.setPrice(0);
-				ticket.setInTime(inTime);
-				ticket.setOutTime(null);*/
-			 verify(ticketDAO,Mockito.times(1)).saveTicket(any(Ticket.class));
-			
+			// check the connection is not null
+			assertNotNull(ticketDAO.dataBaseConfig.getConnection());
 			// check if the ticket saved with vehicleregnumber, requesting the DB 'test"
 			// with method getTicket(vehicleRegnumber)
 			// and request SQL prepared and stocked in constant GET_TICKET
@@ -136,26 +129,22 @@ public class ParkingDataBaseIT {
 	}
 
 	@Test
-	public void testParkingLotExit() throws InterruptedException, SQLException {
+	public void testParkingLotExit() throws InterruptedException, SQLException, ClassNotFoundException {
 		try {
-			// long startedAt = System.currentTimeMillis();
 			testParkingACar();
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			Thread.sleep(5000);
+
 			parkingService.processExitingVehicle();
-			// long endedAt = System.currentTimeMillis();
-
 			System.out.println("INTIME testparking" + ticketDAO.getTicket("ABCDEF").getInTime());
-			// Time converted in rate of Hour
-			/*
-			 * double timeElapsedOfMethodsMilliSeconds = endedAt - startedAt; double
-			 * timeElapsedOfMethodsInRateHour = timeElapsedOfMethodsMilliSeconds / 1000 / 60
-			 * / 60; System.out.println("time elapsed of methods in rate Hour " +
-			 * timeElapsedOfMethodsInRateHour);
-			 */
-
 			// TODO: check that the fare generated and out time are populated correctly in
 			// the database
+			verify(ticketDAO, Mockito.times(4)).getTicket(anyString());
+			verify(ticketDAO, Mockito.times(2)).updateTicket(any(Ticket.class));
+			verify(parkingSpotDAO, Mockito.times(3)).updateParking(any(ParkingSpot.class));
+			
+			// check the connection is not null
+			assertNotNull(ticketDAO.dataBaseConfig.getConnection());
 
 			// check if price of ticket in DB 'test' is correctly calculated according
 			// duration and fare for parking type CAR and saved
@@ -194,16 +183,13 @@ public class ParkingDataBaseIT {
 			parkingService.processIncomingVehicle();
 			Thread.sleep(5000);
 			parkingService.processExitingVehicle();
+
 			dataBasePrepareService.simulateInTimeDataBaseEntries();
-
-			// ParkingService parkingService = new ParkingService(inputReaderUtil,
-			// parkingSpotDAO, ticketDAO);
-
-			long startedAt = System.currentTimeMillis();
 			parkingService.processIncomingVehicle();
 			parkingService.processExitingVehicle();
-			long endedAt = System.currentTimeMillis();
-
+			
+			// check the connection is not null
+			assertNotNull(ticketDAO.dataBaseConfig.getConnection());
 			fareCalculatorService = new FareCalculatorService();
 			long inTimeRecurringUser = ticketDAO.getTicket("GHIJK").getInTime().getTime();
 			long outTimeRecurringUser = ticketDAO.getTicket("GHIJK").getOutTime().getTime();
