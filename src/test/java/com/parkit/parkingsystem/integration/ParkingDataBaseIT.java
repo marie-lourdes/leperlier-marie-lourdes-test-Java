@@ -73,6 +73,12 @@ public class ParkingDataBaseIT {
 			// TODO: check that a ticket is actualy saved in DB and Parking table is updated
 			// with availability
 			ticketSaved = ticketDAO.getTicket("ABCDEF");
+
+			//assertTrue(ticketDAO.saveTicket(ticket), "saveTicket should be retrun true ");
+			// check if the ticket saved with vehicleregnumber, requesting the DB 'test"
+			// with method getTicket(vehicleRegnumber)
+			// and request SQL prepared and stocked in constant GET_TICKET
+			assertNotNull(ticketSaved, "error saving ticket in DB 'test' test");
 			// check the time of saving ticket to ensure it's the same ticket
 			System.out.println("ticket saved with intime " + ticketSaved.getInTime());
 			int nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable = parkingSpotDAO
@@ -80,13 +86,14 @@ public class ParkingDataBaseIT {
 			System.out.println(
 					"nextParkingNumberAvailable after registering the ticket and the parking number in DB 'test' is : "
 							+ nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable);
+			assertTrue(
+					nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable > ticketSaved
+							.getParkingSpot().getId(),
+					"error updating and registering in DB 'test' availabilty false of parking number in method process incoming");
 			// check if parkingSpotDAO.updateparking return true with call method
 			// isAvailable() in the method
 			assertTrue(parkingSpotDAO.updateParking(parkingSpot), "updateParking should return true ");
-			// check if the ticket saved with vehicleregnumber, requesting the DB 'test"
-			// with method getTicket(vehicleRegnumber)
-			// and request SQL prepared and stocked in constant GET_TICKET
-			assertNotNull(ticketSaved, "error saving ticket in DB 'test' test");
+
 			assertTrue(
 					nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable > parkingSpot
 							.getId(),
