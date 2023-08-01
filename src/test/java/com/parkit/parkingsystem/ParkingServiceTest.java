@@ -11,7 +11,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.sql.SQLException;
 import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -105,12 +104,8 @@ public class ParkingServiceTest {
 
 	@Test
 	public void testProcessExitingVehicleUnableUpdate() {
-		try {
-			try {
-				when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		try {		
+			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");	
 			when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
 			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -165,7 +160,6 @@ public class ParkingServiceTest {
 	@Test
 	public void testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {
 		int selectionUser = 0;
-
 		try {
 			when(inputReaderUtil.readSelection()).thenReturn(3);
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
