@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -75,7 +76,7 @@ public class ParkingDataBaseIT {
 
 	@Test
 	public void testParkingACar() throws SQLException {
-		try {
+		try {	
 			when(inputReaderUtil.readSelection()).thenReturn(1);
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -132,6 +133,8 @@ public class ParkingDataBaseIT {
 	public void testParkingLotExit() throws InterruptedException, SQLException, ClassNotFoundException {
 		try {
 			testParkingACar();
+			lenient().when(inputReaderUtil.readSelection()).thenReturn(2);
+			//when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			Thread.sleep(5000);
 
@@ -176,7 +179,7 @@ public class ParkingDataBaseIT {
 	public void testParkingLotExitRecurringUser() throws InterruptedException, SQLException {
 		try {
 			dataBasePrepareService.clearDataBaseEntries();
-			Thread.sleep(5000);
+			Thread.sleep(5000);	
 			when(inputReaderUtil.readSelection()).thenReturn(1);
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("GHIJK");
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -188,6 +191,10 @@ public class ParkingDataBaseIT {
 			parkingService.processIncomingVehicle();
 			parkingService.processExitingVehicle();
 			
+			verify(inputReaderUtil, Mockito.times(2)).readSelection();
+			verify(inputReaderUtil, Mockito.times(4)).readVehicleRegistrationNumber();
+			assertEquals(1,inputReaderUtil.readSelection());
+			assertEquals("GHIJK",inputReaderUtil.readVehicleRegistrationNumber());
 			// check the connection is not null
 			assertNotNull(ticketDAO.dataBaseConfig.getConnection());
 			fareCalculatorService = new FareCalculatorService();
