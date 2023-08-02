@@ -81,6 +81,7 @@ public class ParkingServiceTest {
 			assertEquals("ABCDEF",inputReaderUtil.readVehicleRegistrationNumber());
 			assertEquals(1,parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
 			assertTrue(parkingSpotDAO.updateParking(parkingSpot));
+			assertFalse(parkingSpot.isAvailable());
 			assertTrue(ticketDAO.saveTicket(ticket));
 			assertEquals(2,ticketDAO.getNbTicket("ABCDEF"));
 		} catch (Exception e) {
@@ -113,7 +114,8 @@ public class ParkingServiceTest {
 			assertEquals("ABCDEF",inputReaderUtil.readVehicleRegistrationNumber());
 			assertEquals(ticket,ticketDAO.getTicket("ABCDEF"));
 			assertTrue(ticketDAO.updateTicket(ticket), "error updating ticket, return false");
-			assertTrue(parkingSpotDAO.updateParking(parkingSpot), "error parkingspot, return false");
+			assertTrue(parkingSpotDAO.updateParking(parkingSpot), "error updating parkingspot, return false");
+			assertTrue(parkingSpot.isAvailable());
 			assertEquals(2,ticketDAO.getNbTicket("ABCDEF"));
 			
 		} catch (Exception e) {
@@ -134,11 +136,15 @@ public class ParkingServiceTest {
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
 			parkingService.processExitingVehicle();	
+			verify(ticketDAO, Mockito.times(1)).getTicket("ABCDEF");
+			verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
+			verify(parkingSpotDAO, Mockito.times(0)).updateParking(any(ParkingSpot.class));
+			assertEquals(2,inputReaderUtil.readSelection());
+			assertEquals("ABCDEF",inputReaderUtil.readVehicleRegistrationNumber());
+			assertEquals(ticket,ticketDAO.getTicket("ABCDEF"));
 			assertFalse(ticketDAO.updateTicket(ticket),
 					"error updating ticket for exiting vehicle,should be return false not true");
-			verify(parkingSpotDAO, Mockito.times(0)).updateParking(any(ParkingSpot.class));
-			verify(ticketDAO, Mockito.times(1)).getTicket("ABCDEF");
-			verify(ticketDAO, Mockito.times(2)).updateTicket(any(Ticket.class));
+			assertFalse(parkingSpotDAO.updateParking(parkingSpot), "error updating parkingspot, should be return false not true");
 		} catch (Exception e) {
 			
 		} catch (AssertionError ex) {
@@ -157,7 +163,9 @@ public class ParkingServiceTest {
 			
 			parkingService.getNextParkingNumberIfAvailable();
 			ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+			verify(inputReaderUtil, Mockito.times(2)).readSelection();
 			verify(parkingSpotDAO, Mockito.times(2)).getNextAvailableSlot(any(ParkingType.class));
+			assertEquals(1,inputReaderUtil.readSelection());
 			assertAll(()->assertEquals(parkingNumber, parkingSpot.getId()), ()-> assertEquals( isAvailable, parkingSpot.isAvailable()));
 			
 		} catch (Exception e) {
@@ -175,6 +183,9 @@ public class ParkingServiceTest {
 			parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			
 			parkingService.getNextParkingNumberIfAvailable();	
+			verify(inputReaderUtil, Mockito.times(1)).readSelection();
+			verify(parkingSpotDAO, Mockito.times(1)).getNextAvailableSlot(any(ParkingType.class));
+			assertEquals(1,inputReaderUtil.readSelection());
 			assertTrue(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR) <= 0);
 			assertNull(parkingService.getNextParkingNumberIfAvailable(),
 					"error parking number not found, should be return null ");
@@ -199,6 +210,7 @@ public class ParkingServiceTest {
 			parkingService.getNextParkingNumberIfAvailable();		
 			selectionUser = inputReaderUtil.readSelection();
 			verify(inputReaderUtil, Mockito.times(2)).readSelection();
+			assertEquals(3,inputReaderUtil.readSelection());
 			assertFalse(selectionUser > 0 && selectionUser <= 2, "wrong argument: " + selectionUser
 					+ " should return false,argument parking type must be 1 or 2, assertion");
 			assertNull(parkingService.getNextParkingNumberIfAvailable(),
