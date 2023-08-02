@@ -8,7 +8,6 @@ import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
 public class InteractiveShell {
-
     private static final Logger logger = LogManager.getLogger("InteractiveShell");
 
     public static void loadInterface(){
@@ -49,5 +48,4 @@ public class InteractiveShell {
         System.out.println("2 Vehicle Exiting - Generate Ticket Price");
         System.out.println("3 Shutdown System");
     }
-
 }

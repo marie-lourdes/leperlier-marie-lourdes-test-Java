@@ -13,9 +13,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
 public class ParkingService {
-
 	private static final Logger logger = LogManager.getLogger("ParkingService");
-
 	private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
 
 	private InputReaderUtil inputReaderUtil;
@@ -51,10 +49,9 @@ public class ParkingService {
 				ticketDAO.saveTicket(ticket);
 							
 				// Get number of ticket and display message if the vehicle is already registered
-				 ticketsPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
-				duration = fareCalculatorService.getDurationOfParking();
-						
+				ticketsPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
 				System.out.println("ticketsPerVehicle process incoming vehicle" + ticketsPerVehicle);
+				duration = fareCalculatorService.getDurationOfParking();
 				if (ticketsPerVehicle > 1 && duration > 0.5) {
 					System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de\r\n"
 							+ "notre parking, vous allez obtenir une remise de 5%");
@@ -113,8 +110,7 @@ public class ParkingService {
 	}
 
 	public void processExitingVehicle() {
-		try {
-			
+		try {		
 			String vehicleRegNumber = getVehichleRegNumber();
 			Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
 			Date outTime = new Date();
