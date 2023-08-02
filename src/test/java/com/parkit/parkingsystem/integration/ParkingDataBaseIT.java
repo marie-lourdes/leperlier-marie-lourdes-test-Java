@@ -70,10 +70,6 @@ public class ParkingDataBaseIT {
 		dataBasePrepareService = null;
 	}
 
-	/*
-	 * @BeforeEach private void setUpPerTest() throws Exception { }
-	 */
-
 	@Test
 	public void testParkingACar() throws SQLException {
 		try {	
@@ -125,7 +121,7 @@ public class ParkingDataBaseIT {
 			e.printStackTrace();
 			throw new RuntimeException("Failed to set up per test mock object inputReaderUtil in testParkingACar");
 		} catch (AssertionError ex) {
-			fail(ex.getMessage());
+			fail(ex);
 		}
 	}
 
@@ -168,7 +164,7 @@ public class ParkingDataBaseIT {
 					"error updating in DB the outTime of ticket saved should return a date TimeStamp from DB 'test', not Null");
 
 		} catch (AssertionError ex) {
-			fail(ex.getMessage());
+			fail(ex);
 		}
 
 		System.out.println("ticket updated with fare " + ticketDAO.getTicket("ABCDEF").getPrice() + "and outime "
@@ -221,7 +217,7 @@ public class ParkingDataBaseIT {
 			throw new RuntimeException(
 					"Failed to set up per test mock object inputReaderUtil in testParkingLotExitRecurringUser");
 		} catch (AssertionError ex) {
-			fail(ex.getMessage());
+			fail(ex);
 		}
 	}
 }
