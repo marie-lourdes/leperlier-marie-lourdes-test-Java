@@ -49,10 +49,7 @@ public class ParkingService {
 				ticket.setInTime(inTime);
 				ticket.setOutTime(null);
 				ticketDAO.saveTicket(ticket);
-				//log test
-				System.out.println("ticket methode saveTicket processIncoming inTime typedeDate:  "+ (ticket.getInTime()).getClass().getSimpleName());
-				//System.out.println("ticket methode updatetcket processIncoming outimetypedeDate:  "+ (ticket.getOutTime()).getClass().getSimpleName());
-				
+							
 				// Get number of ticket and display message if the vehicle is already registered
 				 ticketsPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
 				duration = fareCalculatorService.getDurationOfParking();
