@@ -1,10 +1,11 @@
 package com.parkit.parkingsystem.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.util.InputReaderUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class InteractiveShell {
 
@@ -24,20 +25,20 @@ public class InteractiveShell {
             loadMenu();
             int option = inputReaderUtil.readSelection();
             switch(option){
-                case 1: {
+                case 1 -> {
                     parkingService.processIncomingVehicle();
-                    break;
+                    
                 }
-                case 2: {
+                case 2 -> {
                     parkingService.processExitingVehicle();
-                    break;
+                   
                 }
-                case 3: {
+                case 3 -> {
                     System.out.println("Exiting from the system!");
                     continueApp = false;
-                    break;
+                    
                 }
-                default: System.out.println("Unsupported option. Please enter a number corresponding to the provided menu");
+                default -> System.out.println("Unsupported option. Please enter a number corresponding to the provided menu");
             }
         }
     }
