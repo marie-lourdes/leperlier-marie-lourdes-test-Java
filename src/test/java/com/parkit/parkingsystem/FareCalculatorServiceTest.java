@@ -39,10 +39,10 @@ public class FareCalculatorServiceTest {
 			ticket.setOutTime(outTime);
 			ticket.setParkingSpot(parkingSpot);
 			fareCalculatorService.calculateFare(ticket);
-			assertEquals(Fare.CAR_RATE_PER_HOUR,ticket.getPrice());
+			assertEquals(Fare.CAR_RATE_PER_HOUR, ticket.getPrice());
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
-		}	
+		}
 	}
 
 	@Test
@@ -57,7 +57,7 @@ public class FareCalculatorServiceTest {
 			ticket.setOutTime(outTime);
 			ticket.setParkingSpot(parkingSpot);
 			fareCalculatorService.calculateFare(ticket);
-			assertEquals(Fare.BIKE_RATE_PER_HOUR ,ticket.getPrice());
+			assertEquals(Fare.BIKE_RATE_PER_HOUR, ticket.getPrice());
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
 		}
@@ -100,7 +100,7 @@ public class FareCalculatorServiceTest {
 			assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
-		}		
+		}
 	}
 
 	@Test
@@ -119,7 +119,7 @@ public class FareCalculatorServiceTest {
 			assertEquals((0.75 * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice());
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
-		}		
+		}
 	}
 
 	@Test
@@ -138,7 +138,7 @@ public class FareCalculatorServiceTest {
 			assertEquals((0.75 * Fare.CAR_RATE_PER_HOUR), ticket.getPrice());
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
-		}		
+		}
 	}
 
 	@Test
@@ -157,7 +157,7 @@ public class FareCalculatorServiceTest {
 			assertEquals((0.0 * Fare.CAR_RATE_PER_HOUR), ticket.getPrice());
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
-		}	
+		}
 	}
 
 	@Test
@@ -176,7 +176,7 @@ public class FareCalculatorServiceTest {
 			assertEquals((0.0 * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice());
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
-		}	
+		}
 	}
 
 	@Test
@@ -195,7 +195,7 @@ public class FareCalculatorServiceTest {
 			assertEquals((24 * Fare.CAR_RATE_PER_HOUR), ticket.getPrice());
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
-		}	
+		}
 	}
 
 	@Test
@@ -218,7 +218,7 @@ public class FareCalculatorServiceTest {
 			assertEquals(ticketCarDiscount, ticket.getPrice());
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
-		}	
+		}
 	}
 
 	@Test
@@ -240,6 +240,6 @@ public class FareCalculatorServiceTest {
 			assertEquals(ticketBikeDiscount, ticket.getPrice());
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
-		}	
+		}
 	}
 }
