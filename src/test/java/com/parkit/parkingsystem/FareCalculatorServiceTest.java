@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Date;
 
 public class FareCalculatorServiceTest {
-
 	private static FareCalculatorService fareCalculatorService;
 	private Ticket ticket;
 
@@ -79,11 +78,6 @@ public class FareCalculatorServiceTest {
 		} catch (AssertionError ex) {
 			fail(ex.getMessage());
 		}
-
-		/*
-		 * assertThrows(IllegalArgumentException.class, () ->{
-		 * parkingSpot.getParkingType(); });
-		 */
 	}
 
 	@Test
