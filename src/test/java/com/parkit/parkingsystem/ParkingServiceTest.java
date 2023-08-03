@@ -214,7 +214,7 @@ public class ParkingServiceTest {
 			assertFalse(selectionUser > 0 && selectionUser <= 2, "wrong argument: " + selectionUser
 					+ " should return false,argument parking type must be 1 or 2, assertion");
 			assertNull(parkingService.getNextParkingNumberIfAvailable());
-			assertThrows(IllegalArgumentException.class, () -> parkingService.getVehichleType());
+			assertThrows(IllegalArgumentException.class, () -> parkingService.getVehicleType());
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(
