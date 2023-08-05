@@ -9,7 +9,11 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 
 public class InteractiveShell {
     private static final Logger logger = LogManager.getLogger("InteractiveShell");
-
+    
+    private InteractiveShell() {
+    	
+    }
+    
     public static void loadInterface(){
         logger.info("App initialized!!!");
         System.out.println("Welcome to Parking System!");
