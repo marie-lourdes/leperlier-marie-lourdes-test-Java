@@ -94,7 +94,7 @@ public class ParkingDataBaseIT {
 			// check if the ticket saved with vehicleregnumber, requesting the DB 'test"
 			// with method getTicket(vehicleRegnumber)
 			// and request SQL prepared and stocked in constant GET_TICKET
-			assertNotNull(ticketSaved, "error saving ticket in DB 'test' test");
+			assertNotNull(ticketSaved, "error saving ticket in DB 'test' test");	
 			assertTrue(
 					nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable > ticketSaved
 							.getParkingSpot().getId(),
