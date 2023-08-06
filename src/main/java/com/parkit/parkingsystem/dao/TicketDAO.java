@@ -70,7 +70,6 @@ public class TicketDAO {
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
-
 			dataBaseConfig.closePreparedStatement(ps);
 			dataBaseConfig.closeConnection(con);
 		}
@@ -117,11 +116,11 @@ public class TicketDAO {
 		} catch (Exception ex) {
 			logger.error("Error selecting the number of tickets", ex);
 		} finally {
-			System.out.println("nbTicketsPerVehicle" + nbTicketsPerVehicle);
 			dataBaseConfig.closeResultSet(rs);
 			dataBaseConfig.closePreparedStatement(ps);
 			dataBaseConfig.closeConnection(con);
 		}
+		logger.debug("nbTicketsPerVehicle" + nbTicketsPerVehicle);
 		return nbTicketsPerVehicle;
 	}
 }
