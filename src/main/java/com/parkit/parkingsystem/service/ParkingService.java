@@ -35,7 +35,8 @@ public class ParkingService {
 			if (parkingSpot != null && parkingSpot.getId() > 0) {
 				String vehicleRegNumber = getVehicleRegNumber();
 				parkingSpot.setAvailable(false);
-				parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as false
+				parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as
+															// false
 
 				Date inTime = new Date();
 				Ticket ticket = new Ticket();
@@ -46,7 +47,7 @@ public class ParkingService {
 				ticket.setInTime(inTime);
 				ticket.setOutTime(null);
 				ticketDAO.saveTicket(ticket);
-							
+
 				// Get number of ticket and display message if the vehicle is already registered
 				ticketsPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
 				logger.debug("ticketsPerVehicle process incoming vehicle" + ticketsPerVehicle);
@@ -95,29 +96,33 @@ public class ParkingService {
 		logger.info("2 BIKE");
 		int input = inputReaderUtil.readSelection();
 		switch (input) {
-			case 1 -> { return ParkingType.CAR; }	
-			case 2 -> {return ParkingType.BIKE; }
-			default -> {
-				logger.error("Incorrect input provided");
-				throw new IllegalArgumentException("Entered input is invalid");
-			}
+		case 1 -> {
+			return ParkingType.CAR;
+		}
+		case 2 -> {
+			return ParkingType.BIKE;
+		}
+		default -> {
+			logger.error("Incorrect input provided");
+			throw new IllegalArgumentException("Entered input is invalid");
+		}
 		}
 	}
 
 	public void processExitingVehicle() {
-		try {		
+		try {
 			String vehicleRegNumber = getVehicleRegNumber();
 			Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
 			Date outTime = new Date();
 			ticket.setOutTime(outTime);
-			
+
 			if (ticketDAO.updateTicket(ticket)) {
 				ParkingSpot parkingSpot = ticket.getParkingSpot();
 				parkingSpot.setAvailable(true);
 				parkingSpotDAO.updateParking(parkingSpot);
 
 				fareCalculatorService.calculateFare(ticket);
-				
+
 				// Apply price discount -5% if the vehicleregNumber is already registered with
 				// method calculateFare( ticket, true)
 				ticketsPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
@@ -136,13 +141,12 @@ public class ParkingService {
 				ticket.setPrice(shortDoubleTicketPrice);
 				ticketDAO.updateTicket(ticket);
 				logger.info("Please pay the parking fare:" + shortDoubleTicketPrice);
-				logger.info(
-						"Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
+				logger.info("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
 			} else {
 				logger.info("Unable to update ticket information. Error occurred");
 			}
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			logger.error("Unable to process exiting vehicle", e);
 		}
 	}

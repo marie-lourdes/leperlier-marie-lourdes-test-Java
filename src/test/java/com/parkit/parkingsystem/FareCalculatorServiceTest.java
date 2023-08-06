@@ -17,17 +17,17 @@ public class FareCalculatorServiceTest {
 	private Ticket ticket;
 
 	@BeforeAll
-	public static void setUp() {
+	static void setUp() {
 		fareCalculatorService = new FareCalculatorService();
 	}
 
 	@BeforeEach
-	public void setUpPerTest() {
+	void setUpPerTest() {
 		ticket = new Ticket();
 	}
 
 	@Test
-	public void testCalculateFareCar() {
+	void testCalculateFareCar() {
 		try {
 			Date inTime = new Date();
 			inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
@@ -45,7 +45,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	public void testCalculateFareBike() {
+	void testCalculateFareBike() {
 		try {
 			Date inTime = new Date();
 			inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
@@ -63,7 +63,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	public void testCalculateFareUnkownType() {
+	void testCalculateFareUnkownType() {
 		try {
 			Date inTime = new Date();
 			inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
@@ -80,7 +80,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	public void testCalculateFareBikeWithFutureInTime() {
+	void testCalculateFareBikeWithFutureInTime() {
 		try {
 			Date inTime = new Date();
 			inTime.setTime(System.currentTimeMillis() + (60 * 60 * 1000));
@@ -97,7 +97,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	public void testCalculateFareBikeWithLessThanOneHourParkingTime() {
+	void testCalculateFareBikeWithLessThanOneHourParkingTime() {
 		try {
 			Date inTime = new Date();
 			// 45 minutes parking time should give 3/4th parking fare
@@ -116,7 +116,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	public void testCalculateFareCarWithLessThanOneHourParkingTime() {
+	void testCalculateFareCarWithLessThanOneHourParkingTime() {
 		try {
 			Date inTime = new Date();
 			// 45 minutes parking time should give 3/4th parking fare
@@ -135,7 +135,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	public void testCalculateFareCarWithLessThan30minutesParkingTime() {
+	void testCalculateFareCarWithLessThan30minutesParkingTime() {
 		try {
 			Date inTime = new Date();
 			// 30 minutes parking time should give 1/2th parking fare
@@ -154,7 +154,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	public void testCalculateFareBikeWithLessThan30minutesParkingTime() {
+	void testCalculateFareBikeWithLessThan30minutesParkingTime() {
 		try {
 			Date inTime = new Date();
 			// 30 minutes parking time should give 1/2th parking fare
@@ -173,7 +173,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	public void testCalculateFareCarWithMoreThanADayParkingTime() {
+	void testCalculateFareCarWithMoreThanADayParkingTime() {
 		try {
 			Date inTime = new Date();
 			// 24 hours parking time should give 24 * parking fare per hour
@@ -192,7 +192,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	public void testCalculateFareCarWithDiscount() {
+	void testCalculateFareCarWithDiscount() {
 		try {
 			Date inTime = new Date();
 			// 45 minutes parking time should give 3/4th parking fare
@@ -215,7 +215,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	public void testCalculateFareBikeWithDiscount() {
+	void testCalculateFareBikeWithDiscount() {
 		try {
 			Date inTime = new Date();
 			// 45 minutes parking time should give 3/4th parking fare
