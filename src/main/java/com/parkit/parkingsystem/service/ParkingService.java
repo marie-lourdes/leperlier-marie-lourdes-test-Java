@@ -66,9 +66,14 @@ public class ParkingService {
 		}
 	}
 
-	public String getVehicleRegNumber() throws Exception {
-		logger.info("Please type the vehicle registration number and press enter key");
-		return inputReaderUtil.readVehicleRegistrationNumber();
+	public String getVehicleRegNumber() {
+		try {
+			logger.info("Please type the vehicle registration number and press enter key");
+			return inputReaderUtil.readVehicleRegistrationNumber();
+		} catch (Exception e) {
+			logger.error("Unable to get vehicle Registration Number", e);
+		}
+		return null;
 	}
 
 	public ParkingSpot getNextParkingNumberIfAvailable() {
