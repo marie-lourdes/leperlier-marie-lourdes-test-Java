@@ -50,7 +50,7 @@ public class ParkingService {
 
 				// Get number of ticket and display message if the vehicle is already registered
 				ticketsPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
-				logger.debug("ticketsPerVehicle process incoming vehicle" + ticketsPerVehicle);
+				logger.debug("ticketsPerVehicle process incoming vehicle {} ", ticketsPerVehicle);
 				duration = fareCalculatorService.getDurationOfParking();
 				if (ticketsPerVehicle > 1 && duration > 0.5) {
 					logger.info("Heureux de vous revoir ! En tant qu’utilisateur régulier de\r\n"
@@ -58,8 +58,8 @@ public class ParkingService {
 				}
 
 				logger.info("Generated Ticket and saved in DB");
-				logger.info("Please park your vehicle in spot number:" + parkingSpot.getId());
-				logger.info("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
+				logger.info("Please park your vehicle in spot number: {} ", parkingSpot.getId());
+				logger.info("Recorded in-time for vehicle number: {} is: {} ",vehicleRegNumber,inTime);
 			}
 		} catch (Exception e) {
 			logger.error("Unable to process incoming vehicle", e);
@@ -126,7 +126,7 @@ public class ParkingService {
 				// Apply price discount -5% if the vehicleregNumber is already registered with
 				// method calculateFare( ticket, true)
 				ticketsPerVehicle = ticketDAO.getNbTicket(vehicleRegNumber);
-				logger.debug("ticketPerVehicle : " + ticketsPerVehicle);
+				logger.debug("ticketPerVehicle : {} ", ticketsPerVehicle);
 				duration = fareCalculatorService.getDurationOfParking();
 				if (ticketsPerVehicle > 1 && duration > 0.5) {
 					fareCalculatorService.calculateFare(ticket, true);
@@ -140,8 +140,8 @@ public class ParkingService {
 				shortDoubleTicketPrice = Math.round(ticketPrice * 100.0) / 100.0;
 				ticket.setPrice(shortDoubleTicketPrice);
 				ticketDAO.updateTicket(ticket);
-				logger.info("Please pay the parking fare:" + shortDoubleTicketPrice);
-				logger.info("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
+				logger.info("Please pay the parking fare: {} ", shortDoubleTicketPrice);
+				logger.info("Recorded out-time for vehicle number: {} is: {} ",ticket.getVehicleRegNumber(),outTime);
 			} else {
 				logger.info("Unable to update ticket information. Error occurred");
 			}
