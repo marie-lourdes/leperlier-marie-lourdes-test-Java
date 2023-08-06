@@ -51,7 +51,7 @@ public class ParkingDataBaseIT {
 	private static InputReaderUtil inputReaderUtil;
 
 	@BeforeAll
-	static void setUp() throws Exception {
+	private static void setUp() throws Exception {
 		parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
@@ -59,7 +59,7 @@ public class ParkingDataBaseIT {
 
 	// free up the resource used with the classes needed to connect to the database
 	@AfterAll
-	static void tearDown() {
+	private static void tearDown() {
 		parkingSpotDAO.dataBaseConfig = null;
 		ticketDAO.dataBaseConfig = null;
 		dataBasePrepareService = null;
@@ -94,7 +94,7 @@ public class ParkingDataBaseIT {
 			// check if the ticket saved with vehicleregnumber, requesting the DB 'test"
 			// with method getTicket(vehicleRegnumber)
 			// and request SQL prepared and stocked in constant GET_TICKET
-			assertNotNull(ticketSaved, "error saving ticket in DB 'test' test");	
+			assertNotNull(ticketSaved, "error saving ticket in DB 'test' test");
 			assertTrue(
 					nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable > ticketSaved
 							.getParkingSpot().getId(),

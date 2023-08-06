@@ -17,7 +17,7 @@ public class FareCalculatorServiceTest {
 	private Ticket ticket;
 
 	@BeforeAll
-	static void setUp() {
+	private static void setUp() {
 		fareCalculatorService = new FareCalculatorService();
 	}
 
