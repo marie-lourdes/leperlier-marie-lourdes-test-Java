@@ -182,7 +182,6 @@ public class ParkingServiceTest {
 			assertEquals(1, inputReaderUtil.readSelection());
 			assertTrue(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR) <= 0);
 			assertNull(parkingService.getNextParkingNumberIfAvailable());
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(

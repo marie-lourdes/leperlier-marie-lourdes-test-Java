@@ -59,7 +59,7 @@ public class ParkingService {
 
 				logger.info("Generated Ticket and saved in DB");
 				logger.info("Please park your vehicle in spot number: {} ", parkingSpot.getId());
-				logger.info("Recorded in-time for vehicle number: {} is: {} ",vehicleRegNumber,inTime);
+				logger.info("Recorded in-time for vehicle number: {} is: {} ", vehicleRegNumber, inTime);
 			}
 		} catch (Exception e) {
 			logger.error("Unable to process incoming vehicle", e);
@@ -71,7 +71,7 @@ public class ParkingService {
 			logger.info("Please type the vehicle registration number and press enter key");
 			return inputReaderUtil.readVehicleRegistrationNumber();
 		} catch (Exception e) {
-			logger.error("Unable to get vehicle Registration Number", e);
+			logger.error("Unable to get vehicle registration number", e);
 		}
 		return null;
 	}
@@ -85,7 +85,7 @@ public class ParkingService {
 			if (parkingNumber > 0) {
 				parkingSpot = new ParkingSpot(parkingNumber, parkingType, true);
 			} else {
-				throw new Exception("Error fetching parking number from DB. Parking slots might be full");
+				throw new NullPointerException("Error fetching parking number from DB. Parking slots might be full");
 			}
 		} catch (IllegalArgumentException ie) {
 			logger.error("Error parsing user input for type of vehicle", ie);
@@ -146,7 +146,7 @@ public class ParkingService {
 				ticket.setPrice(shortDoubleTicketPrice);
 				ticketDAO.updateTicket(ticket);
 				logger.info("Please pay the parking fare: {} ", shortDoubleTicketPrice);
-				logger.info("Recorded out-time for vehicle number: {} is: {} ",ticket.getVehicleRegNumber(),outTime);
+				logger.info("Recorded out-time for vehicle number: {} is: {} ", ticket.getVehicleRegNumber(), outTime);
 			} else {
 				logger.info("Unable to update ticket information. Error occurred");
 			}
