@@ -51,7 +51,7 @@ public class ParkingDataBaseIT {
 	private static InputReaderUtil inputReaderUtil;
 
 	@BeforeAll
-	public static void setUp() throws Exception {
+	static void setUp() throws Exception {
 		parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
 		ticketDAO.dataBaseConfig = dataBaseTestConfig;
 		dataBasePrepareService = new DataBasePrepareService();
@@ -59,14 +59,14 @@ public class ParkingDataBaseIT {
 
 	// free up the resource used with the classes needed to connect to the database
 	@AfterAll
-	private static void tearDown() {
+	static void tearDown() {
 		parkingSpotDAO.dataBaseConfig = null;
 		ticketDAO.dataBaseConfig = null;
 		dataBasePrepareService = null;
 	}
 
 	@Test
-	public void testParkingACar() throws SQLException {
+	void testParkingACar() throws SQLException {
 		try {
 			when(inputReaderUtil.readSelection()).thenReturn(1);
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
@@ -120,7 +120,7 @@ public class ParkingDataBaseIT {
 	}
 
 	@Test
-	public void testParkingLotExit() throws InterruptedException, SQLException, ClassNotFoundException {
+	void testParkingLotExit() throws InterruptedException, SQLException, ClassNotFoundException {
 		try {
 			testParkingACar();
 			lenient().when(inputReaderUtil.readSelection()).thenReturn(2);
@@ -165,7 +165,7 @@ public class ParkingDataBaseIT {
 	}
 
 	@Test
-	public void testParkingLotExitRecurringUser() throws InterruptedException, SQLException {
+	void testParkingLotExitRecurringUser() throws InterruptedException, SQLException {
 		try {
 			dataBasePrepareService.clearDataBaseEntries();
 			Thread.sleep(5000);
