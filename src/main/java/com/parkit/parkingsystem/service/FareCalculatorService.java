@@ -54,10 +54,10 @@ public class FareCalculatorService {
 	}
 
 	public void calculateDurationOfParking(long inHour, long outHour) {
-		double duration = outHour - inHour;
+		double durationOfParking = outHour - inHour;
 		// convert duration milliseconds in rate hour
-		duration = duration / 1000 / 60 / 60;
-		this.duration = duration;
+		durationOfParking = durationOfParking / 1000 / 60 / 60;
+		this.duration = durationOfParking;
 	}
 
 	public double getDurationOfParking() {
