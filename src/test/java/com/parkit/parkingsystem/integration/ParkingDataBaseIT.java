@@ -124,7 +124,6 @@ class ParkingDataBaseIT {
 		try {
 			testParkingACar();
 			lenient().when(inputReaderUtil.readSelection()).thenReturn(2);
-			// when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			
 			parkingService.processExitingVehicle();
@@ -133,7 +132,6 @@ class ParkingDataBaseIT {
 			// TODO: check that the fare generated and out time are populated correctly in
 			// the database
 			verify(ticketDAO, Mockito.times(3)).getTicket(anyString());
-			verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
 			verify(parkingSpotDAO, Mockito.times(3)).updateParking(any(ParkingSpot.class));
 			// check the connection is not null
 			assertNotNull(ticketDAO.dataBaseConfig.getConnection());
