@@ -44,7 +44,7 @@ public class ParkingServiceTest {
 	private static TicketDAO ticketDAO;
 
 	@BeforeEach
-	public void setUpPerTest() {
+	void setUpPerTest() {
 		parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 		ticket = new Ticket();
 		ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
@@ -54,7 +54,7 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void testProcessIncomingVehicle() {
+	void testProcessIncomingVehicle() {
 		try {
 			when(inputReaderUtil.readSelection()).thenReturn(1);
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
@@ -87,7 +87,7 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void testProcessExitingVehicle() {
+	void testProcessExitingVehicle() {
 		try {
 			lenient().when(inputReaderUtil.readSelection()).thenReturn(2);
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
@@ -119,7 +119,7 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void testProcessExitingVehicleUnableUpdate() {
+	void testProcessExitingVehicleUnableUpdate() {
 		try {
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 			when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
@@ -145,7 +145,7 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void testGetNextParkingNumberIfAvailable() {
+	void testGetNextParkingNumberIfAvailable() {
 		try {
 			int parkingNumber = 1;
 			boolean isAvailable = true;
@@ -170,7 +170,7 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
+	void testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
 		try {
 			when(inputReaderUtil.readSelection()).thenReturn(1);
 			when(parkingSpotDAO.getNextAvailableSlot(any(ParkingType.class))).thenReturn(-1);
@@ -193,7 +193,7 @@ public class ParkingServiceTest {
 	}
 
 	@Test
-	public void testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {
+	void testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {
 		int selectionUser = 0;
 		try {
 			selectionUser = inputReaderUtil.readSelection();
