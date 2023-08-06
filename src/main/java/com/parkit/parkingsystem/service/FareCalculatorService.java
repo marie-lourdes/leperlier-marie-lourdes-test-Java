@@ -65,7 +65,7 @@ public class FareCalculatorService {
 	}
 
 	public void calculateFare(Ticket ticket, boolean discount) {
-		if (discount == true) {
+		if (discount) {
 			double ticketDiscountPrice = 0.95 * ticket.getPrice();
 			ticket.setPrice(ticketDiscountPrice);
 			logger.debug("ticket price discount {} ", ticket.getPrice());
