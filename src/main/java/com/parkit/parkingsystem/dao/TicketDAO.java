@@ -120,7 +120,7 @@ public class TicketDAO {
 			dataBaseConfig.closePreparedStatement(ps);
 			dataBaseConfig.closeConnection(con);
 		}
-		logger.debug("nbTicketsPerVehicle {}",nbTicketsPerVehicle);
+		logger.debug("nbTicketsPerVehicle {}", nbTicketsPerVehicle);
 		return nbTicketsPerVehicle;
 	}
 }

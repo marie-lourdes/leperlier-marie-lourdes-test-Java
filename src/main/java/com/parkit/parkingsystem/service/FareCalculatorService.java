@@ -1,9 +1,13 @@
 package com.parkit.parkingsystem.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
 
 public class FareCalculatorService {
+	private static final Logger logger = LogManager.getLogger("FareCalculatorService");
 	private long inHour;
 	private long outHour;
 	private double duration;
@@ -23,24 +27,24 @@ public class FareCalculatorService {
 
 		rateHourOf30minutes = 0.50;
 		isDurationLessThan30minutes = duration <= rateHourOf30minutes;
-		System.out.println("duration------------ " + duration);
+		logger.debug("duration------------ {} ", duration);
 
 		// if the duration is less or equal to 30 minutes: rounds down the duration the
 		// rate of hour of the duration , so 0.0
 		if (isDurationLessThan30minutes) {
 			duration = Math.floor(duration);
-			System.out.println("duration less than 30 min bike and car reduced to " + duration);
+			logger.debug("duration less than 30 min bike and car reduced to {} ", duration);
 		}
 
 		switch (ticket.getParkingSpot().getParkingType()) {
 		case CAR: {
 			ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
-			System.out.println("ticket price car " + ticket.getPrice());
+			logger.debug("ticket price car {} ", ticket.getPrice());
 			break;
 		}
 		case BIKE: {
 			ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
-			System.out.println("ticket price bike " + ticket.getPrice());
+			logger.debug("ticket price bike {} ", ticket.getPrice());
 			break;
 		}
 		default:
@@ -64,7 +68,7 @@ public class FareCalculatorService {
 		if (discount == true) {
 			double ticketDiscountPrice = 0.95 * ticket.getPrice();
 			ticket.setPrice(ticketDiscountPrice);
-			System.out.println("ticket price discount" + ticket.getPrice());
+			logger.debug("ticket price discount {} ", ticket.getPrice());
 		}
 	}
 }
