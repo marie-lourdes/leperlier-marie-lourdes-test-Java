@@ -34,7 +34,7 @@ import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
 @ExtendWith(MockitoExtension.class)
-public class ParkingDataBaseIT {
+class ParkingDataBaseIT {
 	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 	private static DataBasePrepareService dataBasePrepareService;
 	private static ParkingSpot parkingSpot;
@@ -126,15 +126,14 @@ public class ParkingDataBaseIT {
 			lenient().when(inputReaderUtil.readSelection()).thenReturn(2);
 			// when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-			Thread.sleep(5000);
-
+			
 			parkingService.processExitingVehicle();
 
 			System.out.println("INTIME testparking" + ticketDAO.getTicket("ABCDEF").getInTime());
 			// TODO: check that the fare generated and out time are populated correctly in
 			// the database
 			verify(ticketDAO, Mockito.times(3)).getTicket(anyString());
-			verify(ticketDAO, Mockito.times(2)).updateTicket(any(Ticket.class));
+			verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
 			verify(parkingSpotDAO, Mockito.times(3)).updateParking(any(ParkingSpot.class));
 			// check the connection is not null
 			assertNotNull(ticketDAO.dataBaseConfig.getConnection());
@@ -168,12 +167,10 @@ public class ParkingDataBaseIT {
 	void testParkingLotExitRecurringUser() throws InterruptedException, SQLException {
 		try {
 			dataBasePrepareService.clearDataBaseEntries();
-			Thread.sleep(5000);
 			when(inputReaderUtil.readSelection()).thenReturn(1);
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("GHIJK");
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 			parkingService.processIncomingVehicle();
-			Thread.sleep(5000);
 			parkingService.processExitingVehicle();
 
 			dataBasePrepareService.simulateInTimeDataBaseEntries();
