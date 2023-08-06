@@ -31,7 +31,7 @@ import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
 @ExtendWith(MockitoExtension.class)
-public class ParkingServiceTest {
+class ParkingServiceTest {
 	private static ParkingService parkingService;
 	private static Ticket ticket;
 	private static ParkingSpot parkingSpot;
