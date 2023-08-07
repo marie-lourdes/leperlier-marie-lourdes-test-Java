@@ -16,4 +16,6 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 /bin/
+# Data connection
+src/main/java/com/parkit/parkingsystem/constants/DBConnectionConstants.java
 
