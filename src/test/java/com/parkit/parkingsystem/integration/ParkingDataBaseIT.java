@@ -86,7 +86,8 @@ class ParkingDataBaseIT {
 			int nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable = parkingSpotDAO
 					.getNextAvailableSlot(ParkingType.CAR);
 			logger.debug(
-					"nextParkingNumberAvailable after registering the ticket and the parking number in DB 'test' is : {}", nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable);
+					"nextParkingNumberAvailable after registering the ticket and the parking number in DB 'test' is : {}",
+					nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable);
 			// TODO: check that a ticket is actualy saved in DB and Parking table is updated
 			// with availability
 			verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
@@ -127,7 +128,7 @@ class ParkingDataBaseIT {
 			testParkingACar();
 			lenient().when(inputReaderUtil.readSelection()).thenReturn(2);
 			ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-			
+
 			parkingService.processExitingVehicle();
 
 			logger.debug("INTIME testparking {}", ticketDAO.getTicket("ABCDEF").getInTime());
@@ -159,7 +160,8 @@ class ParkingDataBaseIT {
 			fail(ex);
 		}
 
-		logger.debug("ticket updated with fare {} and outime {}  of ticket in DB 'test'with availability in DB 'test'", ticketDAO.getTicket("ABCDEF").getPrice(), ticketDAO.getTicket("ABCDEF").getOutTime() );
+		logger.debug("ticket updated with fare {} and outime {}  of ticket in DB 'test'with availability in DB 'test'",
+				ticketDAO.getTicket("ABCDEF").getPrice(), ticketDAO.getTicket("ABCDEF").getOutTime());
 	}
 
 	@Test

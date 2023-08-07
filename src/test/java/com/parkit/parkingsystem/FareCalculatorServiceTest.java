@@ -14,14 +14,10 @@ import java.util.Date;
 class FareCalculatorServiceTest {
 	private static FareCalculatorService fareCalculatorService;
 	private Ticket ticket;
-
-	@BeforeAll
-	private static void setUp() {
-		fareCalculatorService = new FareCalculatorService();
-	}
-
+	
 	@BeforeEach
 	void setUpPerTest() {
+		fareCalculatorService = new FareCalculatorService();
 		ticket = new Ticket();
 	}
 
