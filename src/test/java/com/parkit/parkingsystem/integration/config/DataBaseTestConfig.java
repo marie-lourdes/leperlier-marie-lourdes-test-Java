@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
-import com.parkit.parkingsystem.constants.DBConnectionConstant;
+import com.parkit.parkingsystem.constants.DBConnectionConstants;
 
 public class DataBaseTestConfig extends DataBaseConfig {
 
@@ -27,7 +27,7 @@ public class DataBaseTestConfig extends DataBaseConfig {
     		e.printStackTrace();
     	}
         return DriverManager.getConnection(
-        		 DBConnectionConstant.URL_DBTESTCONNECTION,DBConnectionConstant.USER_DBCONNECTION,DBConnectionConstant.PASSWORD_DBCONNECTION);
+        		 DBConnectionConstants.URL_DBTESTCONNECTION,DBConnectionConstants.USER_DBCONNECTION,DBConnectionConstants.PASSWORD_DBCONNECTION);
     }
 
     public void closeConnection(Connection con) {
