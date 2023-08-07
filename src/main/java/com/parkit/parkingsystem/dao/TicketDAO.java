@@ -66,7 +66,7 @@ public class TicketDAO {
 			}
 			dataBaseConfig.closeResultSet(rs);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.trace(e);
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
@@ -88,7 +88,7 @@ public class TicketDAO {
 			ps.execute();
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.trace(e);
 		} catch (Exception ex) {
 			logger.error("Error saving ticket info", ex);
 		} finally {
@@ -112,7 +112,7 @@ public class TicketDAO {
 				nbTicketsPerVehicle = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.trace(e);
 		} catch (Exception ex) {
 			logger.error("Error selecting the number of tickets", ex);
 		} finally {
