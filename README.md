@@ -33,6 +33,10 @@ https://dev.mysql.com/downloads/mysql/
 After downloading the mysql 8 installer and installing it, you will be asked to configure the password for the default `root` account.
 This code uses the default root account to connect and the password can be set as `rootroot`. If you add another user/credentials make sure to change the same in the code base.
 
+Please add data connection in file DBConnectionConstantsExample and delete "Example" after fill the file.
+
+Follow this [link](https://www.jmdoudoux.fr/java/dej/chap-jdbc.htm) to help you. 
+
 ### Running App
 
 Post installation of MySQL, Java and Maven, you will have to set up the tables and data in the data base.
@@ -46,4 +50,8 @@ The app has unit tests and integration tests written. More of these need to be a
 
 To run the tests from maven, go to the folder that contains the pom.xml file and execute the below command.
 
-`mvn test`
+`mvn test` for unit test
+
+or 
+
+`mvn verify` for Integration test with DataBase
