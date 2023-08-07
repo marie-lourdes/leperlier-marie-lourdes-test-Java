@@ -3,6 +3,8 @@ package com.parkit.parkingsystem.config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.parkit.parkingsystem.constants.DBConnectionConstant;
+
 import java.sql.*;
 
 public class DataBaseConfig {
@@ -12,7 +14,8 @@ public class DataBaseConfig {
 	public Connection getConnection() throws ClassNotFoundException, SQLException {
 		logger.info("Create DB connection");
 		Class.forName("com.mysql.cj.jdbc.Driver");
-		return DriverManager.getConnection("jdbc:mysql://localhost:3306/prod", "root", "rootroot");
+		return DriverManager.getConnection(DBConnectionConstant.URL_DBCONNECTION,DBConnectionConstant.USER_DBCONNECTION, DBConnectionConstant.PASSWORD_DBCONNECTION);
+		//return DriverManager.getConnection("jdbc:mysql://localhost:3306/prod", "root", "rootroot");
 	}
 
 	public void closeConnection(Connection con) {

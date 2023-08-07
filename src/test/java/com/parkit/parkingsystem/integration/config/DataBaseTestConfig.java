@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
+import com.parkit.parkingsystem.constants.DBConnectionConstant;
 
 public class DataBaseTestConfig extends DataBaseConfig {
 
@@ -26,7 +27,7 @@ public class DataBaseTestConfig extends DataBaseConfig {
     		e.printStackTrace();
     	}
         return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/test?serverTimezone=Europe/Paris","root","rootroot");
+        		 DBConnectionConstant.URL_DBTESTCONNECTION,DBConnectionConstant.USER_DBCONNECTION,DBConnectionConstant.PASSWORD_DBCONNECTION);
     }
 
     public void closeConnection(Connection con) {
