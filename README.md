@@ -35,7 +35,7 @@ This code uses the default root account to connect and the password can be set a
 
 Please add data connection in file DBConnectionConstantsExample and delete "Example" after fill the file.
 
-Follow this [link](https://www.jmdoudoux.fr/java/dej/chap-jdbc.htm) to help you. 
+Follow this [link](https://www.jmdoudoux.fr/java/dej/chap-jdbc.htm) to help you creating connection with DB. 
 
 ### Running App
 

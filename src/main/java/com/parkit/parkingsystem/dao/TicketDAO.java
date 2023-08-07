@@ -34,7 +34,7 @@ public class TicketDAO {
 			ps.execute();
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.trace(e);
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
