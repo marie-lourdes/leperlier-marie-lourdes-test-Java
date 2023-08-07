@@ -14,7 +14,6 @@ public class DataBaseConfig {
 		logger.trace("Create DB connection");
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		return DriverManager.getConnection(DBConnectionConstants.URL_DBCONNECTION,DBConnectionConstants.USER_DBCONNECTION, DBConnectionConstants.PASSWORD_DBCONNECTION);
-		//return DriverManager.getConnection("jdbc:mysql://localhost:3306/prod", "root", "rootroot");
 	}
 
 	public void closeConnection(Connection con) {
