@@ -17,5 +17,5 @@ buildNumber.properties
 .classpath
 /bin/
 # Data connection
-leperlier-marie-lourdes-test-Java/src/main/java/com/parkit/parkingsystem/constants/DBConnectionConstants.java
+/leperlier-marie-lourdes-test-Java/src/main/java/com/parkit/parkingsystem/constants/DBConnectionConstants.java
 
