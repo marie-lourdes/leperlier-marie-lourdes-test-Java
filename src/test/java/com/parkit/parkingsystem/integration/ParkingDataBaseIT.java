@@ -12,6 +12,8 @@ import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -35,6 +37,7 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 
 @ExtendWith(MockitoExtension.class)
 class ParkingDataBaseIT {
+	private static final Logger logger = LogManager.getLogger("ParkingDataBaseIT");
 	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 	private static DataBasePrepareService dataBasePrepareService;
 	private static ParkingSpot parkingSpot;
@@ -78,13 +81,12 @@ class ParkingDataBaseIT {
 			ticketSaved = ticketDAO.getTicket("ABCDEF");
 			// Ticket ticketSavedOutime = ticketDAO.getTicket("ABCDEF");
 			// check the inTime of saving ticket to ensure it's the same ticket
-			System.out.println("ticket saved with inTime  " + ticketSaved.getInTime());
-			System.out.println("ticket saved with outTime  " + ticketSaved.getOutTime());
+			logger.debug("ticket saved with inTime {} ", ticketSaved.getInTime());
+			logger.debug("ticket saved with outTime {} ", ticketSaved.getOutTime());
 			int nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable = parkingSpotDAO
 					.getNextAvailableSlot(ParkingType.CAR);
-			System.out.println(
-					"nextParkingNumberAvailable after registering the ticket and the parking number in DB 'test' is : "
-							+ nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable);
+			logger.debug(
+					"nextParkingNumberAvailable after registering the ticket and the parking number in DB 'test' is : {}", nextParkingNumberMinAvailableForCar_ShouldBeSuperieurToParkingNumberPreviouslyAvailable);
 			// TODO: check that a ticket is actualy saved in DB and Parking table is updated
 			// with availability
 			verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
@@ -112,7 +114,7 @@ class ParkingDataBaseIT {
 					+ " in DB 'test' after registring the incoming vehicle");
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.trace(e);
 			throw new RuntimeException("Failed to set up per test mock object inputReaderUtil in testParkingACar");
 		} catch (AssertionError ex) {
 			fail(ex);
@@ -128,7 +130,7 @@ class ParkingDataBaseIT {
 			
 			parkingService.processExitingVehicle();
 
-			System.out.println("INTIME testparking" + ticketDAO.getTicket("ABCDEF").getInTime());
+			logger.debug("INTIME testparking {}", ticketDAO.getTicket("ABCDEF").getInTime());
 			// TODO: check that the fare generated and out time are populated correctly in
 			// the database
 			verify(ticketDAO, Mockito.times(3)).getTicket(anyString());
@@ -146,7 +148,7 @@ class ParkingDataBaseIT {
 			double priceExpected = 0.0 * Fare.CAR_RATE_PER_HOUR;
 			double priceActual = ticketDAO.getTicket("ABCDEF").getPrice();
 			assertEquals(priceExpected, priceActual);
-			System.out.println("DURATION testparking " + duration);
+			logger.debug("duration parking {} ", duration);
 
 			// check if the outTime updated in Db during the process exiting vehicle don't
 			// return null
@@ -157,8 +159,7 @@ class ParkingDataBaseIT {
 			fail(ex);
 		}
 
-		System.out.println("ticket updated with fare " + ticketDAO.getTicket("ABCDEF").getPrice() + "and outime "
-				+ ticketDAO.getTicket("ABCDEF").getOutTime() + " of ticket in DB 'test'with availability in DB 'test'");
+		logger.debug("ticket updated with fare {} and outime {}  of ticket in DB 'test'with availability in DB 'test'", ticketDAO.getTicket("ABCDEF").getPrice(), ticketDAO.getTicket("ABCDEF").getOutTime() );
 	}
 
 	@Test
@@ -187,7 +188,7 @@ class ParkingDataBaseIT {
 			long outTimeRecurringUser = ticketDAO.getTicket("GHIJK").getOutTime().getTime();
 			fareCalculatorService.calculateDurationOfParking(inTimeRecurringUser, outTimeRecurringUser);
 			double duration = fareCalculatorService.getDurationOfParking();
-			System.out.println("DURATION testparkingrecurringuser " + duration);
+			logger.debug("duration parking recurring user {} ", duration);
 			double priceExpected = Math.round((0.95 * (duration * Fare.CAR_RATE_PER_HOUR)));
 			double priceActual = Math.round((ticketDAO.getTicket("GHIJK").getPrice()));
 			// check the calcul of price discount
@@ -202,9 +203,9 @@ class ParkingDataBaseIT {
 			int nbTicketOfRecurringUser = ticketDAO.getNbTicket("GHIJK");
 			assertTrue(nbTicketOfRecurringUser > 1,
 					"the number of ticket ohf user should be more than one ticket,this user is not recurring user");
-			System.out.println("price testparkingrecurringuser" + ticketDAO.getTicket("GHIJK").getPrice());
+			logger.debug("price testparkingrecurringuser {} ", ticketDAO.getTicket("GHIJK").getPrice());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.trace(e);
 			throw new RuntimeException(
 					"Failed to set up per test mock object inputReaderUtil in testParkingLotExitRecurringUser");
 		} catch (AssertionError ex) {

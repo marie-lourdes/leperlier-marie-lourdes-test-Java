@@ -8,7 +8,6 @@ import com.parkit.parkingsystem.constants.DBConnectionConstants;
 import java.sql.*;
 
 public class DataBaseConfig {
-
 	private static final Logger logger = LogManager.getLogger("DataBaseConfig");
 
 	public Connection getConnection() throws ClassNotFoundException, SQLException {
