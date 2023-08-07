@@ -15,7 +15,7 @@ public class InteractiveShell {
 	}
 
 	public static void loadInterface() {
-		logger.info("App initialized!!!");
+		logger.trace("App initialized!!!");
 		logger.info("Welcome to Parking System!");
 
 		boolean continueApp = true;
