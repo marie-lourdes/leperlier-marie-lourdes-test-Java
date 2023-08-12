@@ -7,6 +7,7 @@
 	<packaging>jar</packaging>
 
 	<properties>
+		<dep.junit.version>5.9.3</dep.junit.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
@@ -33,13 +34,13 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.9.3</version>
+			<version>${dep.junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.9.3</version>
+			<version>${dep.junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
