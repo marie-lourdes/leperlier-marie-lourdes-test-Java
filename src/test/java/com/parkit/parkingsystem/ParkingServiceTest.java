@@ -115,14 +115,15 @@ class ParkingServiceTest {
 		try {
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 			when(ticketDAO.getTicket("ABCDEF")).then((invocation) -> ticketDAO.updateTicket((Ticket) invocation));
-			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
 
 			parkingService.processExitingVehicle();
 
+			verify(ticketDAO, Mockito.times(1)).getTicket("ABCDEF");
 			verify(parkingSpotDAO, Mockito.times(0)).updateParking(any(ParkingSpot.class));
 			assertFalse(ticket.getParkingSpot().isAvailable());
 			assertNull(ticket.getOutTime());
 			assertNotNull(ticket.getInTime());
+			assertFalse(ticketDAO.updateTicket(any(Ticket.class)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Failed to set up per test mock objects in processExitingVehicleTest");
