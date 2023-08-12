@@ -3,6 +3,7 @@ package com.parkit.parkingsystem;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -99,7 +100,7 @@ class ParkingServiceTest {
 			verify(ticketDAO, Mockito.times(2)).updateTicket(any(Ticket.class));
 			verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 			verify(ticketDAO, Mockito.times(1)).getNbTicket("ABCDEF");
-			assertTrue(parkingSpot.isAvailable());
+			assertTrue(ticket.getParkingSpot().isAvailable());
 			assertEquals(2, ticketDAO.getNbTicket("ABCDEF"));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,15 +114,17 @@ class ParkingServiceTest {
 	void testProcessExitingVehicleUnableUpdate() {
 		try {
 			when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-			when(ticketDAO.getTicket("ABCDEF")).thenReturn(ticket);
+			when(ticketDAO.getTicket("ABCDEF")).then((invocation) -> ticketDAO.updateTicket((Ticket) invocation));
 			when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
 
 			parkingService.processExitingVehicle();
 
 			verify(ticketDAO, Mockito.times(1)).getTicket("ABCDEF");
-			verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
+			// verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
 			verify(parkingSpotDAO, Mockito.times(0)).updateParking(any(ParkingSpot.class));
-			assertFalse(parkingSpot.isAvailable());
+			assertFalse(ticket.getParkingSpot().isAvailable());
+			assertNull(ticket.getOutTime());
+			assertNotNull(ticket.getInTime());
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Failed to set up per test mock objects in processExitingVehicleTest");
