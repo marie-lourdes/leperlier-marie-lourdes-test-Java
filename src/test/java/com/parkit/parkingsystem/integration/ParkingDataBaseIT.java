@@ -180,8 +180,6 @@ class ParkingDataBaseIT {
 
 			verify(inputReaderUtil, Mockito.times(2)).readSelection();
 			verify(inputReaderUtil, Mockito.times(4)).readVehicleRegistrationNumber();
-			assertEquals(1, inputReaderUtil.readSelection());
-			assertEquals("GHIJK", inputReaderUtil.readVehicleRegistrationNumber());
 			// check the connection is not null
 			assertNotNull(ticketDAO.dataBaseConfig.getConnection());
 
