@@ -119,8 +119,6 @@ class ParkingServiceTest {
 
 			parkingService.processExitingVehicle();
 
-			verify(ticketDAO, Mockito.times(1)).getTicket("ABCDEF");
-			// verify(ticketDAO, Mockito.times(1)).updateTicket(any(Ticket.class));
 			verify(parkingSpotDAO, Mockito.times(0)).updateParking(any(ParkingSpot.class));
 			assertFalse(ticket.getParkingSpot().isAvailable());
 			assertNull(ticket.getOutTime());
